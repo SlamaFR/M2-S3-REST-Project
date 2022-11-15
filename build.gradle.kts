@@ -21,3 +21,10 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+
+configure(listOf(":server", ":client").map(::project)) {
+    dependencies {
+        project(":common")
+    }
+}
