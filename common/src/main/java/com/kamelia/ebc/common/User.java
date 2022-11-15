@@ -11,10 +11,16 @@ public interface User extends Remote {
 
     String username() throws RemoteException;
 
+    Kind kind() throws RemoteException;
+
     Set<Bike> ownedBikes() throws RemoteException;
 
     Set<Bike> orderedBikes() throws RemoteException;
 
-    Set<BikeOrder> orders() throws RemoteException;
+    Set<BikeOrder> ordersHistory() throws RemoteException;
+
+    enum Kind {
+        STUDENT, EMPLOYEE, EIFFEL_BIKE_CORP
+    }
 
 }
