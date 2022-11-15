@@ -5,22 +5,13 @@ import java.rmi.RemoteException;
 import java.util.Set;
 import java.util.UUID;
 
-public interface User extends Remote {
+public interface User extends UserDataHolder {
 
-    UUID id() throws RemoteException;
+    void orderBike(UUID bikeId) throws RemoteException;
 
-    String username() throws RemoteException;
+    void returnBike(UUID bikeId, Comment comment, ReturnState state) throws RemoteException;
 
-    Kind kind() throws RemoteException;
+    void addOwnedBike(Bike bike) throws RemoteException;
 
-    Set<Bike> ownedBikes() throws RemoteException;
-
-    Set<Bike> orderedBikes() throws RemoteException;
-
-    Set<BikeOrder> ordersHistory() throws RemoteException;
-
-    enum Kind {
-        STUDENT, EMPLOYEE, EIFFEL_BIKE_CORP
-    }
-
+    void removeOwnedBike(Bike bike) throws RemoteException;
 }
