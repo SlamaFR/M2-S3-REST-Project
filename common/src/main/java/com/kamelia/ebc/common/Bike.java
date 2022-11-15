@@ -12,7 +12,7 @@ public interface Bike extends Remote {
 
     User owner() throws RemoteException;
 
-    Optional<User> orderer() throws RemoteException;
+    RemoteOptional<User> orderer() throws RemoteException;
 
     List<BikeOrder> ordersHistory() throws RemoteException;
 

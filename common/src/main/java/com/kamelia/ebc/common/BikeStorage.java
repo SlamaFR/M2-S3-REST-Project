@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface BikeStorage extends Remote {
 
-    Optional<Bike> findById(UUID bikeId) throws RemoteException;
+    RemoteOptional<Bike> findById(UUID bikeId) throws RemoteException;
 
     Bike save(User owner, UUID token) throws RemoteException;
 
