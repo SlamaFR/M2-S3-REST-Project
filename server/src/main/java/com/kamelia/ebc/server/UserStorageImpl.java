@@ -76,6 +76,6 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     }
 
     private static String hashPassword(String password) {
-        return password; // TODO: hash password
+        return Hasher.instance().hash(password);
     }
 }

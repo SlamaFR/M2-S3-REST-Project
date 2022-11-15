@@ -25,6 +25,6 @@ subprojects {
 
 configure(listOf(":server", ":client").map(::project)) {
     dependencies {
-        project(":common")
+        implementation(project(":common"))
     }
 }

@@ -15,8 +15,16 @@ public record Response<E>(State state, String message, RemoteOptional<E> body) i
         return new Response<>(State.OK, "OK", RemoteOptional.ofNullable(body));
     }
 
+    public static <E> Response<E> notFound() {
+        return new Response<>(State.NOT_FOUND, "Not Found", RemoteOptional.empty());
+    }
+
     public static <E> Response<E> unauthorized() {
         return new Response<>(State.UNAUTHORIZED, "Unauthorized", RemoteOptional.empty());
+    }
+
+    public static <E> Response<E> forbidden() {
+        return new Response<>(State.FORBIDDEN, "Forbidden", RemoteOptional.empty());
     }
 
     public static <E> Response<E> badRequest() {
@@ -27,6 +35,7 @@ public record Response<E>(State state, String message, RemoteOptional<E> body) i
         OK,
         NOT_FOUND,
         UNAUTHORIZED,
+        FORBIDDEN,
         BAD_REQUEST,
     }
 

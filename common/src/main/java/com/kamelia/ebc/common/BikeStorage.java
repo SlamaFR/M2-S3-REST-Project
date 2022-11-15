@@ -10,7 +10,9 @@ public interface BikeStorage extends Remote {
 
     Response<Bike> save(User owner, UUID token) throws RemoteException;
 
-    void deleteById(UUID bikeId, User user, UUID token) throws RemoteException;
+    Response<Void> deleteById(UUID bikeId, User user) throws RemoteException;
 
-    BikeState order(UUID bikeId, User user, UUID token) throws RemoteException;
+    Response<BikeState> order(UUID bikeId, User user) throws RemoteException;
+
+    Response<Void> returnBike(UUID bikeId, User user) throws RemoteException;
 }

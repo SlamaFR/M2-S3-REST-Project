@@ -11,7 +11,19 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-class UserImpl extends UnicastRemoteObject implements User {
+class UserImpl extends AbstractUser implements User {
+
+    private final String hashedPassword;
+    private final BikeStorage storage;
+
+    public UserImpl(String username, Kind kind, String hashedPassword) throws RemoteException {
+        super(username, kind);
+        Objects.requireNonNull(hashedPassword);
+        this.hashedPassword = hashedPassword;
+        this.storage = Server.instance().bikeStorage();
+    }
+
+
 
     @Override
     public void orderBike(UUID bikeId) throws RemoteException {

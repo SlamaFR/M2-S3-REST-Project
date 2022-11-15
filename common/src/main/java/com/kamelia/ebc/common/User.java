@@ -1,8 +1,6 @@
 package com.kamelia.ebc.common;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Set;
 import java.util.UUID;
 
 public interface User extends UserDataHolder {
