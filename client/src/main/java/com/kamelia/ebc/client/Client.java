@@ -7,6 +7,7 @@ import com.kamelia.ebc.common.base.UserStorage;
 
 import java.rmi.Naming;
 import java.util.Objects;
+import java.util.Optional;
 
 class Client {
 
@@ -21,14 +22,22 @@ class Client {
     }
 
     private void run(String[] args) throws Exception {
-        var pimmy = userStorage.save("Pimmy", "p@ssw0rd");
-        if (pimmy.state() != Response.State.OK) {
-            throw new IllegalStateException("Could not create user:" + pimmy.message());
-        }
+        var pimmy = userStorage
+            .save("Pimmy", "p@ssw0rd")
+            .orElseThrow();
 
-        var user = pimmy.body().get();
+        var token = userStorage
+            .login("Pimmy", "p@ssw0rd")
+            .orElseThrow()
+            .second();
 
-        System.out.println(user.username());
+        var bike = bikeStorage
+            .addOwnedBike(pimmy, token)
+            .orElseThrow();
+
+        System.out.println(bike.id());
+        System.out.println(bike.owner().id());
+        System.out.println(bike.owner().username());
     }
 
     public static void main(String[] args) {

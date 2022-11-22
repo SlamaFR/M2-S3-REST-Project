@@ -2,6 +2,9 @@ package com.kamelia.ebc.common.base;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public record Response<E>(State state, String message, RemoteOptional<E> body) implements Serializable {
 
@@ -38,6 +41,17 @@ public record Response<E>(State state, String message, RemoteOptional<E> body) i
     public static <E> Response<E> badRequest(String message) {
         Objects.requireNonNull(message);
         return new Response<>(State.BAD_REQUEST, message, RemoteOptional.empty());
+    }
+
+    public <Ex extends Exception> E orElseThrow(BiFunction<State, String, ? extends Ex> exceptionSupplier) throws Ex {
+        if (state == State.OK) {
+            return body.get();
+        }
+        throw exceptionSupplier.apply(state, message);
+    }
+
+    public E orElseThrow() {
+        return orElseThrow((state, message) -> new IllegalStateException("State: " + state + ", message: " + message));
     }
 
     public enum State {
