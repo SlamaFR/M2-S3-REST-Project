@@ -14,8 +14,10 @@ import com.kamelia.ebc.common.util.UnauthorizedException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -41,6 +43,22 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     public RemoteOptional<Bike> findById(UUID bikeId) throws RemoteException {
         Objects.requireNonNull(bikeId);
         return RemoteOptional.ofNullable(idToBike.get(bikeId));
+    }
+
+    @Override
+    public Response<Set<Bike>> allBikes() throws RemoteException {
+        return Response.ok(new HashSet<>(idToBike.values()));
+    }
+
+    @Override
+    public Response<Set<Bike>> availableBikes() throws RemoteException {
+        var bikes = new HashSet<Bike>();
+        for (var bike : idToBike.values()) {
+            if (bike.orderer() == null) {
+                bikes.add(bike);
+            }
+        }
+        return Response.ok(bikes);
     }
 
     @Override

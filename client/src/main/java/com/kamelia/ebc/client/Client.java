@@ -26,18 +26,34 @@ class Client {
             .save("Pimmy", "p@ssw0rd")
             .orElseThrow();
 
-        var token = userStorage
+        var tokenPimmy = userStorage
             .login("Pimmy", "p@ssw0rd")
             .orElseThrow()
             .second();
 
         var bike = bikeStorage
-            .addOwnedBike(pimmy, token)
+            .addOwnedBike(pimmy, tokenPimmy)
             .orElseThrow();
 
         System.out.println(bike.id());
         System.out.println(bike.owner().id());
         System.out.println(bike.owner().username());
+
+        var porris = userStorage
+            .save("Porris", "p@ssw0rd")
+            .orElseThrow();
+
+        var tokenPorris = userStorage
+            .login("Porris", "p@ssw0rd")
+            .orElseThrow()
+            .second();
+
+        var orderState = bikeStorage
+            .orderBike(bike.id(), porris, tokenPorris)
+            .orElseThrow();
+
+        System.out.println(orderState);
+        System.out.println(bike.orderer().get().username());
     }
 
     public static void main(String[] args) {

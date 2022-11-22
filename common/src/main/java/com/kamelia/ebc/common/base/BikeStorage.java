@@ -9,6 +9,10 @@ public interface BikeStorage extends Remote {
 
     RemoteOptional<Bike> findById(UUID bikeId) throws RemoteException;
 
+    Response<Set<Bike>> allBikes() throws RemoteException;
+
+    Response<Set<Bike>> availableBikes() throws RemoteException;
+
     RemoteOptional<Set<Bike>> userOwnedBikes(User user) throws RemoteException;
 
     RemoteOptional<Set<Bike>> userOrderedBikes(User user) throws RemoteException;
