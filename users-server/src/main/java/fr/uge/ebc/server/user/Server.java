@@ -6,8 +6,6 @@ import java.util.Objects;
 
 class Server {
 
-    private static Server INSTANCE;
-
     private final UserStorageImpl userStorage;
 
     private Server(UserStorageImpl userStorage) {
@@ -23,7 +21,6 @@ class Server {
     public static void main(String[] args) throws Exception {
         var storage = new UserStorageImpl();
         var server = new Server(storage);
-        INSTANCE = server;
         server.run(args);
     }
 

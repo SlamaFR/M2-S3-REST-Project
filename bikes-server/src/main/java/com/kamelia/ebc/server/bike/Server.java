@@ -10,13 +10,10 @@ import java.util.Objects;
 class Server {
 
     private final BikeStorageImpl bikeStorage;
-    private final UserStorage userStorage;
 
-    private Server(BikeStorageImpl bikeStorage, UserStorage userStorage) {
+    private Server(BikeStorageImpl bikeStorage) {
         Objects.requireNonNull(bikeStorage);
-        Objects.requireNonNull(userStorage);
         this.bikeStorage = bikeStorage;
-        this.userStorage = userStorage;
     }
 
     private void run(String[] args) throws Exception {
@@ -27,7 +24,7 @@ class Server {
     public static void main(String[] args) throws Exception {
         var userStorage = (UserStorage) Naming.lookup("rmi://localhost:1099/UserStorage");
         var bikeStorage = new BikeStorageImpl(userStorage);
-        var server = new Server(bikeStorage, userStorage);
+        var server = new Server(bikeStorage);
         server.run(args);
     }
 
