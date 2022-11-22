@@ -84,7 +84,11 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     @Override
     public void logout(UUID sessionId) throws RemoteException {
         Objects.requireNonNull(sessionId);
-        sessionToUser.remove(sessionId);
+        var user = sessionToUser.remove(sessionId);
+        if (user == null) {
+            return;
+        }
+        userIdToSession.remove(user.id());
     }
 
     @Override
