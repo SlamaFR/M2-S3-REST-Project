@@ -1,2 +1,7 @@
 rootProject.name = "EBC"
-include(":bikes-server", ":common", ":client", ":users-server")
+include(
+    ":common",
+    ":bikes-server",
+    ":users-server",
+    ":gustave-bike-service",
+)

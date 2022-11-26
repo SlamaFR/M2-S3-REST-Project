@@ -1,5 +1,6 @@
 plugins {
     java
+    war
 }
 
 group = "fr.uge.ebc"
@@ -23,8 +24,17 @@ subprojects {
 }
 
 
-configure(listOf(":users-server", ":bikes-server", ":client").map(::project)) {
+configure(listOf(":users-server", ":bikes-server", ":gustave-bike-service").map(::project)) {
     dependencies {
         implementation(project(":common"))
+    }
+}
+
+project(":gustave-bike-service") {
+    apply(plugin = "war")
+
+    dependencies {
+        compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
+        compileOnly("jakarta.xml.ws:jakarta.xml.ws-api:3.0.1")
     }
 }
