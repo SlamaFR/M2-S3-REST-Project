@@ -7,6 +7,8 @@ import java.rmi.Naming;
 
 public class RMIClient {
 
+    private static final RMIClient INSTANCE = RMIClient.create();
+
     private final UserStorage userStorage;
     private final BikeStorage bikeStorage;
 
@@ -15,7 +17,7 @@ public class RMIClient {
         this.bikeStorage = bikeStorage;
     }
 
-    public static RMIClient create() {
+    private static RMIClient create() {
         try {
             var userStorage = (UserStorage) Naming.lookup("rmi://localhost:1099/UserStorage");
             var bikeStorage = (BikeStorage) Naming.lookup("rmi://localhost:1100/BikeStorage");
@@ -23,6 +25,10 @@ public class RMIClient {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static RMIClient instance() {
+        return INSTANCE;
     }
 
     public UserStorage userStorage() {
