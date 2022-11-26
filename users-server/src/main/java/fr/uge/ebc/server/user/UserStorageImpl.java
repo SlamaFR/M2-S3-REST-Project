@@ -1,10 +1,12 @@
 package fr.uge.ebc.server.user;
 
-import com.kamelia.ebc.common.base.Pair;
+import com.kamelia.ebc.common.base.Notifier;
+import com.kamelia.ebc.common.base.NotifiableUser;
 import com.kamelia.ebc.common.base.RemoteOptional;
 import com.kamelia.ebc.common.base.Response;
 import com.kamelia.ebc.common.base.User;
 import com.kamelia.ebc.common.base.UserStorage;
+import com.kamelia.ebc.common.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -18,12 +20,14 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     private final HashMap<String, UserImpl> nameToUser;
     private final HashMap<UUID, User> sessionToUser;
     private final HashMap<UUID, UUID> userIdToSession;
+    private final HashMap<UUID, Notifier> userIdToNotifier;
 
     public UserStorageImpl() throws RemoteException {
         this.idToUser = new HashMap<>();
         this.nameToUser = new HashMap<>();
         this.sessionToUser = new HashMap<>();
         this.userIdToSession = new HashMap<>();
+        this.userIdToNotifier = new HashMap<>();
     }
 
     @Override
@@ -39,9 +43,14 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     }
 
     @Override
-    public Response<User> save(String username, String password) throws RemoteException {
+    public Response<NotifiableUser> save(
+        String username,
+        String password,
+        Notifier notifyStrategy
+    ) throws RemoteException {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
+        Objects.requireNonNull(notifyStrategy);
         if (nameToUser.containsKey(username)) {
             return Response.badRequest("Username already taken");
         }
@@ -50,11 +59,12 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
 
         idToUser.put(user.id(), user);
         nameToUser.put(user.username(), user);
-        return Response.ok(user);
+        userIdToNotifier.put(user.id(), notifyStrategy);
+        return Response.ok(new NotifiableUser(user, notifyStrategy));
     }
 
     @Override
-    public Response<Pair<UUID, UUID>> login(String username, String password) throws RemoteException {
+    public Response<Pair<NotifiableUser, UUID>> login(String username, String password) throws RemoteException {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
@@ -78,7 +88,8 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
             return Response.badRequest("Already logged in");
         }
 
-        return Response.ok(new Pair<>(user.id(), sessionId));
+        var notifyStrategy = userIdToNotifier.get(user.id());
+        return Response.ok(new Pair<>(new NotifiableUser(user, notifyStrategy), sessionId));
     }
 
     @Override

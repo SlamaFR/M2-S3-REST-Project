@@ -1,4 +1,4 @@
-package com.kamelia.ebc.common.base;
+package com.kamelia.ebc.common.util;
 
 import java.io.Serializable;
 import java.util.Objects;
