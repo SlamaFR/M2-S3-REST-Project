@@ -1,3 +1,3 @@
 <template>
-  <main>Home</main>
+  <main>Bikes</main>
 </template>
