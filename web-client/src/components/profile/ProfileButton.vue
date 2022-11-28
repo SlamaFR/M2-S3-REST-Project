@@ -1,37 +1,48 @@
 <script lang="ts" setup>
 import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 
-const { user, isConnected, login, logout } = useUserStore();
+const router = useRouter();
 
-function onClickLogin() {
-  login("notKamui", "password");
-  console.log(user);
+const store = useUserStore();
+const { isConnected } = storeToRefs(store);
+const { logout } = store;
+
+function onClickLogin(mode: string) {
+  router.push({ path: "/", query: { mode } });
 }
 
 function onClickLogout() {
-  logout();
+  logout().then(() => {
+    router.push({ path: "/" });
+  });
 }
 </script>
 
 <template>
-  <label tabindex="0" class="btn btn-ghost btn-circle avatar">
-    <div class="w-10 rounded-full">
-      <img src="@/assets/avatar.jpg" alt="user-avatar" />
-    </div>
-  </label>
-  <ul
-    v-if="isConnected"
-    tabindex="0"
-    class="profile-menu tooltip tooltip-bottom"
-    :data-tip="user.username"
-  >
-    <li><a>Profile</a></li>
-    <li><a @click.prevent="onClickLogout">Logout</a></li>
-  </ul>
-  <ul v-else tabindex="0" class="profile-menu">
-    <li><a>Sign in</a></li>
-    <li><a @click.prevent="onClickLogin">Sign up</a></li>
-  </ul>
+  <div v-if="isConnected">
+    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+      <div class="w-10 rounded-full">
+        <img src="@/assets/avatar.jpg" alt="user-avatar" />
+      </div>
+    </label>
+    <ul tabindex="0" class="profile-menu">
+      <li><a>Profile</a></li>
+      <li><a @click.prevent="onClickLogout">Logout</a></li>
+    </ul>
+  </div>
+  <div v-else>
+    <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+      <div class="w-10 rounded-full">
+        <img src="@/assets/avatar.jpg" alt="user-avatar" />
+      </div>
+    </label>
+    <ul tabindex="0" class="profile-menu">
+      <li><a @click.prevent="onClickLogin('login')">Login</a></li>
+      <li><a @click.prevent="onClickLogin('register')">Register</a></li>
+    </ul>
+  </div>
 </template>
 
 <style scoped>

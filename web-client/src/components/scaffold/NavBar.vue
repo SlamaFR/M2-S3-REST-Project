@@ -2,15 +2,19 @@
 import CartButton from "@/components/cart/CartButton.vue";
 import CartMenu from "@/components/cart/CartMenu.vue";
 import ProfileButton from "@/components/profile/ProfileButton.vue";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
 const destinations = [
   { name: "Home", path: "/" },
   { name: "Bikes", path: "/bikes" },
 ];
+
+const { user, isConnected } = storeToRefs(useUserStore());
 </script>
 
 <template>
-  <div class="navbar bg-base-100">
+  <div class="navbar z-50 bg-base-100">
     <div class="flex-1">
       <router-link to="/" class="btn btn-ghost normal-case text-xl">
         Eiffel Bikes
@@ -31,6 +35,11 @@ const destinations = [
       <div class="dropdown dropdown-end">
         <cart-button size="8" />
         <cart-menu />
+      </div>
+      <div v-if="isConnected" class="dropdown dropdown-end">
+        <span>
+          {{ user.username }}
+        </span>
       </div>
       <div class="dropdown dropdown-end">
         <profile-button />

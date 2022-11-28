@@ -1,3 +1,7 @@
+<script lang="ts" setup>
+import LogHero from "@/components/main/LogHero.vue";
+</script>
+
 <template>
-  <main>Home</main>
+  <log-hero />
 </template>

@@ -12,12 +12,16 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.6.0",
+    "@vueuse/integrations": "^9.6.0",
     "daisyui": "^2.42.1",
     "pinia": "^2.0.26",
     "strong-soap": "^3.4.1",
+    "universal-cookie": "^4.0.4",
+    "vee-validate": "^4.7.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "vue-tabler-icons": "^2.16.0"
+    "vue-tabler-icons": "^2.16.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
