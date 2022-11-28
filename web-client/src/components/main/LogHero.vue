@@ -19,7 +19,7 @@ function btnClass(mode: string) {
 </script>
 
 <template>
-  <div class="hero min-h-screen bg-base-200">
+  <div class="hero min-h-full bg-base-200">
     <div class="hero-content flex-col gap-20 lg:flex-row-reverse">
       <div class="text-center lg:text-left">
         <h1 class="text-5xl font-bold">Login now!</h1>
