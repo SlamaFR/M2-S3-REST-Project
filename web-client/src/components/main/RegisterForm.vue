@@ -3,6 +3,7 @@ import { useField, useForm } from "vee-validate";
 import * as yup from "yup";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
+import InputField from "@/components/form/InputField.vue";
 
 const router = useRouter();
 
@@ -45,37 +46,19 @@ function onSubmit() {
 </script>
 
 <template>
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Username</span>
-    </label>
-    <input type="text" class="input input-bordered" v-model="username" />
-    <span v-if="usernameErrors.length" class="text-error">{{
-      usernameErrors[0]
-    }}</span>
-  </div>
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Password</span>
-    </label>
-    <input type="password" class="input input-bordered" v-model="password" />
-    <span v-if="passwordErrors.length" class="text-error">{{
-      passwordErrors[0]
-    }}</span>
-  </div>
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text">Repeat Password</span>
-    </label>
-    <input
-      type="password"
-      class="input input-bordered"
-      v-model="repeatPassword"
-    />
-    <span v-if="repeatPasswordErrors.length" class="text-error">{{
-      repeatPasswordErrors[0]
-    }}</span>
-  </div>
+  <input-field label="Username" v-model="username" :errors="usernameErrors" />
+  <input-field
+    label="Password"
+    v-model="password"
+    :errors="passwordErrors"
+    type="password"
+  />
+  <input-field
+    label="Repeat password"
+    v-model="repeatPassword"
+    :errors="repeatPasswordErrors"
+    type="password"
+  />
   <div class="form-control mt-6">
     <button class="btn btn-primary" @click.prevent="onSubmit">Register</button>
   </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import NavBar from "@/components/scaffold/NavBar.vue";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useWindowSize } from "@vueuse/core";
 
 const { height: appHeight } = useWindowSize();
@@ -12,13 +12,13 @@ const headerHeight = computed(() => header.value?.clientHeight ?? 0);
 
 <template>
   <header class="absolute w-screen" ref="header">
-    <NavBar />
+    <nav-bar />
   </header>
 
   <main
     :style="`--header-height: ${headerHeight}px; --app-height: ${appHeight}px;`"
   >
-    <RouterView />
+    <router-view />
   </main>
 </template>
 
