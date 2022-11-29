@@ -43,7 +43,7 @@ function onAddToCart() {
 </script>
 
 <template>
-  <div class="card w-[90vw] sm:w-[50vw] bg-base-100 shadow-xl">
+  <div class="card min-w-[90vw] sm:min-w-[50vw] bg-base-100 shadow-xl">
     <div class="card-body">
       <h2 class="card-title font-bold text-[24pt] mb-5">
         Bike : {{ props.bike.id }}
