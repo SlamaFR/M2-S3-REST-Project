@@ -3,14 +3,14 @@ import DataTable from "@/components/scaffold/DataTable.vue";
 import type { Bike } from "@/stores/bikes";
 import { useBikesStore } from "@/stores/bikes";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computedAsync, useToggle } from "@vueuse/core";
 
-const { all } = storeToRefs(useBikesStore());
-const data = ref<Bike[]>([]);
-
-all.value.then((bikes) => {
-  data.value = bikes;
-});
+const [filterAvailable, toggleFilterAvailable] = useToggle(false);
+const { all, available } = storeToRefs(useBikesStore());
+const data = computedAsync<Bike[]>(
+  async () => (filterAvailable.value ? await available.value : await all.value),
+  []
+);
 
 const columns = [
   { name: "ID", accessor: "id" },
@@ -28,5 +28,17 @@ const columns = [
 </script>
 
 <template>
-  <data-table :data="data" :columns="columns" />
+  <div class="flex flex-col items-center gap-4">
+    <span class="flex items-center gap-4">
+      <label class="font-bold">Show Available Only</label>
+      <input
+        type="checkbox"
+        class="toggle toggle-lg"
+        :class="{ 'toggle-secondary': filterAvailable }"
+        @click="toggleFilterAvailable()"
+        :checked="filterAvailable"
+      />
+    </span>
+    <data-table :data="data" :columns="columns" />
+  </div>
 </template>
