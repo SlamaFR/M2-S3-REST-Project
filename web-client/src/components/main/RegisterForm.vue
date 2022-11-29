@@ -38,9 +38,6 @@ function onSubmit() {
       form.resetForm();
       return register(usernameValue, passwordValue);
     })
-    .then(() => {
-      router.push("/bikes");
-    })
     .catch((err) => console.log(err)); // TODO: handle error
 }
 </script>
