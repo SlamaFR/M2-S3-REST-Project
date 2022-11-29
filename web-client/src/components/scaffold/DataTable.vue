@@ -3,12 +3,22 @@ import { computed } from "vue";
 
 interface Column {
   name: string;
-  accessor: string | ((row: any) => any);
+  accessor: string | ((row: unknown) => any);
 }
 
-const props = defineProps<{
-  data: object[];
-  columns: Column[];
+const props = withDefaults(
+  defineProps<{
+    data: object[];
+    columns: Column[];
+    clickable?: boolean;
+  }>(),
+  {
+    clickable: false,
+  }
+);
+
+defineEmits<{
+  (e: "row-click", row: object): void;
 }>();
 
 const columnNames = computed(() => props.columns.map((c) => c.name));
@@ -33,8 +43,20 @@ function getCellValue(row: any, accessor: string | ((row: any) => any)) {
           </th>
         </tr>
       </thead>
-      <tbody>
-        <!-- row 1 -->
+      <tbody v-if="clickable">
+        <tr
+          v-for="(item, index) in data"
+          :key="index"
+          class="hover hover:cursor-pointer"
+          @click.prevent="$emit('row-click', $event, item)"
+        >
+          <th>{{ index + 1 }}</th>
+          <td v-for="column of columns" :key="column.accessor">
+            {{ getCellValue(item, column.accessor) }}
+          </td>
+        </tr>
+      </tbody>
+      <tbody v-else>
         <tr v-for="(item, index) in data" :key="index">
           <th>{{ index + 1 }}</th>
           <td v-for="column of columns" :key="column.accessor">

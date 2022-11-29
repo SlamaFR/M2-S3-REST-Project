@@ -30,6 +30,8 @@ export const useBikesStore = defineStore("bikes", () => {
 
   // TODO actual fetch
   async function fetch() {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
     bikes.value = [
       {
         id: "1fae73a1-2521-4383-88fa-e626b16bbd74",
@@ -66,6 +68,102 @@ export const useBikesStore = defineStore("bikes", () => {
               state: "broken",
             },
           },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
+          {
+            date: date,
+            ordered: "user4",
+            comment: {
+              content: "good",
+              stars: 5,
+            },
+            returnState: {
+              details: "good",
+              state: "as new",
+            },
+          },
         ],
         availability: "rented",
       },
@@ -76,6 +174,9 @@ export const useBikesStore = defineStore("bikes", () => {
         availability: "available",
       },
     ];
+    bikes.value.forEach((bike) =>
+      bike.history.sort((a, b) => b.date.getTime() - a.date.getTime())
+    );
   }
 
   const all = computed(async () => {

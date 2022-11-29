@@ -1,12 +1,19 @@
 <script lang="ts" setup>
-defineProps<{
-  label: string;
-  modelValue?: string;
-  errors: string[];
-  type?: string;
-}>();
+withDefaults(
+  defineProps<{
+    label: string;
+    modelValue: string;
+    errors: string[];
+    type?: string;
+  }>(),
+  {
+    modelValue: "",
+  }
+);
 
-defineEmits(["update:modelValue"]);
+defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
 </script>
 
 <template>

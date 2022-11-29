@@ -4,6 +4,9 @@ import type { Bike } from "@/stores/bikes";
 import { useBikesStore } from "@/stores/bikes";
 import { storeToRefs } from "pinia";
 import { computedAsync, useToggle } from "@vueuse/core";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const [filterAvailable, toggleFilterAvailable] = useToggle(false);
 const { all, available } = storeToRefs(useBikesStore());
@@ -11,6 +14,10 @@ const data = computedAsync<Bike[]>(
   async () => (filterAvailable.value ? await available.value : await all.value),
   []
 );
+
+function onRowClick(event: MouseEvent, bike: Bike) {
+  router.push(`/bikes/${bike.id}`);
+}
 
 const columns = [
   { name: "ID", accessor: "id" },
@@ -39,6 +46,11 @@ const columns = [
         :checked="filterAvailable"
       />
     </span>
-    <data-table :data="data" :columns="columns" />
+    <data-table
+      :data="data"
+      :columns="columns"
+      clickable
+      @row-click="onRowClick"
+    />
   </div>
 </template>
