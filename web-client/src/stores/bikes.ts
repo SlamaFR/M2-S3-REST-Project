@@ -13,7 +13,7 @@ export interface ReturnState {
 
 export interface Order {
   date: Date;
-  ordered: string; // orderer username
+  orderer: string; // orderer username
   comment: Comment;
   returnState: ReturnState;
 }
@@ -39,7 +39,7 @@ export const useBikesStore = defineStore("bikes", () => {
         history: [
           {
             date: new Date(),
-            ordered: "user2",
+            orderer: "user2",
             comment: {
               content: "god awfully ugly, but fast af",
               stars: 4,
@@ -58,7 +58,7 @@ export const useBikesStore = defineStore("bikes", () => {
         history: [
           {
             date: new Date(),
-            ordered: "user1",
+            orderer: "user1",
             comment: {
               content: "me not likey vroom vroom",
               stars: 5,
@@ -70,7 +70,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -82,7 +82,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -94,7 +94,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -106,7 +106,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -118,7 +118,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -130,7 +130,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -142,7 +142,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,
@@ -154,7 +154,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
           {
             date: date,
-            ordered: "user4",
+            orderer: "user4",
             comment: {
               content: "good",
               stars: 5,

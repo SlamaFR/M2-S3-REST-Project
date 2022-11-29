@@ -18,6 +18,7 @@ interface BikeDisplayInfo {
 
 const data = computed<BikeDisplayInfo[]>(() =>
   bike.history.map((order) => ({
+    orderer: order.orderer,
     date: order.date,
     details: order.returnState.details,
     state: order.returnState.state,
@@ -27,6 +28,7 @@ const data = computed<BikeDisplayInfo[]>(() =>
 );
 
 const columns = [
+  { name: "Orderer", accessor: "orderer" },
   {
     name: "Date",
     accessor: (row: BikeDisplayInfo) => row.date.toISOString().split("T")[0],
