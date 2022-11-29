@@ -22,8 +22,9 @@ export interface Bike {
   id: string; // uuid
   owner: string; // username
   history: Order[];
-  state: "available" | "rented";
+  availability: "available" | "rented";
 }
+
 export const useBikesStore = defineStore("bikes", () => {
   const bikes = ref<Bike[]>([]);
 
@@ -47,7 +48,7 @@ export const useBikesStore = defineStore("bikes", () => {
             },
           },
         ],
-        state: "available",
+        availability: "available",
       },
       {
         id: "83981c19-fb86-4f05-9db4-aff610b266a9",
@@ -66,7 +67,13 @@ export const useBikesStore = defineStore("bikes", () => {
             },
           },
         ],
-        state: "rented",
+        availability: "rented",
+      },
+      {
+        id: "77743145-cccc-4e30-93ed-1212dd7df3c9",
+        owner: "user3",
+        history: [],
+        availability: "available",
       },
     ];
   }
@@ -77,7 +84,7 @@ export const useBikesStore = defineStore("bikes", () => {
   });
   const available = computed(async () => {
     await fetch();
-    return bikes.value.filter((bike) => bike.state === "available");
+    return bikes.value.filter((bike) => bike.availability === "available");
   });
   async function get(id: string) {
     await fetch();
