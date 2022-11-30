@@ -8,7 +8,7 @@ import { useUserStore } from "@/stores/user";
 const destinations = [
   { name: "Home", path: "/" },
   { name: "All Bikes", path: "/bikes" },
-  { name: "Rented Bikes", path: "/mybikes" },
+  { name: "Rented Bikes", path: "/mybikes", connected: true },
 ];
 
 const { user, isConnected } = storeToRefs(useUserStore());
@@ -24,7 +24,9 @@ const { user, isConnected } = storeToRefs(useUserStore());
     <div class="flex-none gap-5">
       <div class="dropdown dropdown-end btn-group">
         <router-link
-          v-for="destination in destinations"
+          v-for="destination in destinations.filter((d) =>
+            isConnected ? true : !d['connected']
+          )"
           :key="destination.name"
           :to="destination.path"
           class="btn normal-case"
