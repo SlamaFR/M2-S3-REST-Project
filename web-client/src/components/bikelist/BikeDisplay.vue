@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Bike } from "@/stores/bikes";
 import { computed, reactive } from "vue";
-import DataTable from "@/components/scaffold/DataTable.vue";
+import DataTable from "@/components/scaffold/table/DataTable.vue";
 import { useCartStore } from "@/stores/cart";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";

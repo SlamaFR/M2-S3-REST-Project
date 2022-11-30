@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import DataTable from "@/components/scaffold/DataTable.vue";
+import DataTable from "@/components/scaffold/table/DataTable.vue";
 import type { Bike } from "@/stores/bikes";
 import { useBikesStore } from "@/stores/bikes";
 import { storeToRefs } from "pinia";

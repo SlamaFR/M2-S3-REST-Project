@@ -1,15 +1,23 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
+import type { Component } from "vue";
+import CellButton from "@/components/scaffold/table/CellButton.vue";
 
-interface Column {
+interface Accessor {
   name: string;
   accessor: string | ((row: unknown) => any);
+}
+
+interface Button {
+  name: string;
+  icon: Component;
+  onClick: (event: MouseEvent, row: unknown) => void;
 }
 
 const props = withDefaults(
   defineProps<{
     data: object[];
-    columns: Column[];
+    columns: (Accessor | Button)[];
     clickable?: boolean;
   }>(),
   {
@@ -51,16 +59,32 @@ function getCellValue(row: any, accessor: string | ((row: any) => any)) {
           @click.prevent="$emit('row-click', $event, item)"
         >
           <th>{{ index + 1 }}</th>
-          <td v-for="column of columns" :key="column.accessor">
-            {{ getCellValue(item, column.accessor) }}
+          <td v-for="column of columns" :key="column.name">
+            <span v-if="'accessor' in column">{{
+              getCellValue(item, column.accessor)
+            }}</span>
+            <CellButton
+              v-else
+              :item="item"
+              :icon="column.icon"
+              @click="column.onClick"
+            />
           </td>
         </tr>
       </tbody>
       <tbody v-else>
         <tr v-for="(item, index) in data" :key="index">
           <th>{{ index + 1 }}</th>
-          <td v-for="column of columns" :key="column.accessor">
-            {{ getCellValue(item, column.accessor) }}
+          <td v-for="column of columns" :key="column.name">
+            <span v-if="'accessor' in column">{{
+              getCellValue(item, column.accessor)
+            }}</span>
+            <cell-button
+              v-else
+              :item="item"
+              :icon="column.icon"
+              @click="column.onClick"
+            />
           </td>
         </tr>
       </tbody>
