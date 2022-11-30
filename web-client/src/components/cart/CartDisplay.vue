@@ -78,7 +78,13 @@ function onOrder() {
       </div>
 
       <div class="card-actions justify-end">
-        <button class="btn btn-primary" @click="onOrder" :disabled="count === 0">Order</button>
+        <button
+          class="btn btn-primary"
+          @click="onOrder"
+          :disabled="count === 0"
+        >
+          Order
+        </button>
       </div>
     </div>
   </div>

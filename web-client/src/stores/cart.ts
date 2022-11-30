@@ -44,10 +44,10 @@ export const useCartStore = defineStore("cart", () => {
     cart.value.bikes.reduce((acc, bike) => acc + bike.value, 0)
   );
 
-  async function addToCart(id: string): Promise<true | "incart" | false> {
+  async function addToCart(id: string): Promise<boolean> {
     const bike = await getBike(id);
     if (!bike) return false;
-    if (cart.value.bikes.some((bike) => bike.id === id)) return "incart";
+    if (cart.value.bikes.some((bike) => bike.id === id)) return false;
     const { user, bikes } = cart.value;
     const newCart: Cart = { user, bikes: [...bikes, bike] };
     setCart(newCart);
@@ -66,6 +66,10 @@ export const useCartStore = defineStore("cart", () => {
     setCart({ user: cart.value.user, bikes: [] });
   }
 
+  function cartContains(id: string): boolean {
+    return cart.value.bikes.some((bike) => bike.id === id);
+  }
+
   return {
     cart,
     count,
@@ -73,5 +77,6 @@ export const useCartStore = defineStore("cart", () => {
     addToCart,
     removeFromCart,
     clearCart,
+    cartContains,
   };
 });

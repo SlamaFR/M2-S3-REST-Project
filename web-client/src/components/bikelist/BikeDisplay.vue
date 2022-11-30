@@ -43,17 +43,13 @@ const columns = [
 ];
 
 const { isConnected } = storeToRefs(useUserStore());
-const { addToCart } = useCartStore();
+const { addToCart, cartContains } = useCartStore();
 
 function onAddToCart() {
   addToCart(bike.id)
     .then((res) => {
       if (!res) throw new Error();
-      if (res === "incart") {
-        console.log("Already in cart"); // TODO: Add a toast
-      } else {
-        console.log("Added to cart"); // TODO: Add a toast
-      }
+      console.log("Added to cart"); // TODO: Add a toast
     })
     .catch(() => {
       console.log("Failed to add to cart"); // TODO: Add a toast
@@ -95,7 +91,11 @@ function onAddToCart() {
       </div>
 
       <div v-if="isConnected" class="card-actions justify-end">
-        <button class="btn btn-primary" @click="onAddToCart">
+        <button
+          class="btn btn-primary"
+          @click="onAddToCart"
+          :disabled="cartContains(bike.id)"
+        >
           Add to cart
         </button>
       </div>
