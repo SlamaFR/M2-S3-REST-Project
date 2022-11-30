@@ -24,7 +24,7 @@ subprojects {
 }
 
 
-configure(listOf(":users-server", ":bikes-server", ":gustave-bike-service").map(::project)) {
+configure(listOf(":users-server", ":bikes-server", ":gustave-bike-service", ":webservice").map(::project)) {
     dependencies {
         implementation(project(":common"))
     }

@@ -4,4 +4,5 @@ include(
     ":bikes-server",
     ":users-server",
     ":gustave-bike-service",
+    ":webservice"
 )
