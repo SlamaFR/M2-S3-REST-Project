@@ -23,6 +23,7 @@ export interface Bike {
   owner: string; // username
   history: Order[];
   availability: "available" | "rented";
+  value: number; // in USD
 }
 
 export const useBikesStore = defineStore("bikes", () => {
@@ -51,6 +52,7 @@ export const useBikesStore = defineStore("bikes", () => {
           },
         ],
         availability: "available",
+        value: 100,
       },
       {
         id: "83981c19-fb86-4f05-9db4-aff610b266a9",
@@ -166,12 +168,14 @@ export const useBikesStore = defineStore("bikes", () => {
           },
         ],
         availability: "rented",
+        value: 40,
       },
       {
         id: "77743145-cccc-4e30-93ed-1212dd7df3c9",
         owner: "user3",
         history: [],
         availability: "available",
+        value: 150,
       },
     ];
     bikes.value.forEach((bike) =>
