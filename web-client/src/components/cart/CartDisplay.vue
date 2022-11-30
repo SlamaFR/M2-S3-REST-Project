@@ -6,8 +6,11 @@ import { computed } from "vue";
 import type { Bike } from "@/stores/bikes";
 import { useRouter } from "vue-router";
 import { TrashIcon } from "vue-tabler-icons";
+import { useUserStore } from "@/stores/user";
 
 const router = useRouter();
+
+const { addBike } = useUserStore();
 
 const cartStore = useCartStore();
 const { cart, count, subtotal } = storeToRefs(cartStore);
@@ -38,6 +41,7 @@ function onRowClick(event: MouseEvent, bike: Bike) {
 }
 
 function onOrder() {
+  cart.value.bikes.forEach((bike) => addBike(bike));
   clearCart().then();
 }
 </script>
@@ -74,7 +78,7 @@ function onOrder() {
       </div>
 
       <div class="card-actions justify-end">
-        <button class="btn btn-primary" @click="onOrder">Order</button>
+        <button class="btn btn-primary" @click="onOrder" :disabled="count === 0">Order</button>
       </div>
     </div>
   </div>

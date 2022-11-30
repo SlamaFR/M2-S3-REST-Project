@@ -7,7 +7,8 @@ import { useUserStore } from "@/stores/user";
 
 const destinations = [
   { name: "Home", path: "/" },
-  { name: "Bikes", path: "/bikes" },
+  { name: "All Bikes", path: "/bikes" },
+  { name: "Rented Bikes", path: "/mybikes" },
 ];
 
 const { user, isConnected } = storeToRefs(useUserStore());
