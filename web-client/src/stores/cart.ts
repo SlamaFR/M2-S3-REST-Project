@@ -1,14 +1,28 @@
-import { defineStore } from "pinia";
-import { computed } from "vue";
+import { defineStore, storeToRefs } from "pinia";
+import { computed, watch } from "vue";
 import type { Bike } from "@/stores/bikes";
 import { useBikesStore } from "@/stores/bikes";
 import { useCookies } from "@vueuse/integrations/useCookies";
+import type { User } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
+
+interface Cart {
+  user: User;
+  bikes: Bike[];
+}
 
 export const useCartStore = defineStore("cart", () => {
   const cookies = useCookies(["cart"]);
-  const { get } = useBikesStore();
+  const { user, isConnected } = storeToRefs(useUserStore());
+  const { getBike } = useBikesStore();
 
-  function setCart(newCart: Bike[]) {
+  watch(isConnected, (isConnected) => {
+    if (!isConnected) {
+      cookies.remove("cart", { sameSite: "strict", secure: true });
+    }
+  });
+
+  function setCart(newCart: Cart) {
     cookies.set("cart", newCart, {
       sameSite: "strict",
       secure: true,
@@ -16,34 +30,40 @@ export const useCartStore = defineStore("cart", () => {
     });
   }
 
-  const cart = computed<Bike[]>(() => {
-    const cart = cookies.get("cart");
-    if (cart === undefined) {
-      const newCart: Bike[] = [];
+  const cart = computed<Cart>(() => {
+    const cart: Cart = cookies.get("cart");
+    if (!cart || (cart.user?.id ?? undefined) !== user.value.id) {
+      const newCart: Cart = { user: user.value, bikes: [] };
       setCart(newCart);
       return newCart;
     }
     return cart;
   });
-  const count = computed(() => cart.value.length);
+  const count = computed(() => cart.value.bikes.length);
   const subtotal = computed(() =>
-    cart.value.reduce((acc, bike) => acc + bike.value, 0)
+    cart.value.bikes.reduce((acc, bike) => acc + bike.value, 0)
   );
 
-  async function addToCart(id: string): Promise<boolean> {
-    const bike = await get(id);
+  async function addToCart(id: string): Promise<true | "incart" | false> {
+    const bike = await getBike(id);
     if (!bike) return false;
-    const newCart = [...cart.value, bike];
+    if (cart.value.bikes.some((bike) => bike.id === id)) return "incart";
+    const { user, bikes } = cart.value;
+    const newCart: Cart = { user, bikes: [...bikes, bike] };
     setCart(newCart);
     return true;
   }
 
   async function removeFromCart(id: string): Promise<boolean> {
-    const bike = await get(id);
+    const bike = await getBike(id);
     if (!bike) return false;
-    const newCart = cart.value.filter((b) => b.id !== bike.id);
-    setCart(newCart);
+    const newCart = cart.value.bikes.filter((b) => b.id !== bike.id);
+    setCart({ user: cart.value.user, bikes: newCart });
     return true;
+  }
+
+  async function clearCart() {
+    setCart({ user: cart.value.user, bikes: [] });
   }
 
   return {
@@ -52,5 +72,6 @@ export const useCartStore = defineStore("cart", () => {
     subtotal,
     addToCart,
     removeFromCart,
+    clearCart,
   };
 });

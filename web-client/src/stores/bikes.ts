@@ -191,7 +191,7 @@ export const useBikesStore = defineStore("bikes", () => {
     await fetch();
     return bikes.value.filter((bike) => bike.availability === "available");
   });
-  async function get(id: string) {
+  async function getBike(id: string) {
     await fetch();
     return bikes.value.find((bike) => bike.id === id);
   }
@@ -199,6 +199,6 @@ export const useBikesStore = defineStore("bikes", () => {
   return {
     all,
     available,
-    get,
+    getBike,
   };
 });

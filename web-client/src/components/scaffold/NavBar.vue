@@ -32,7 +32,7 @@ const { user, isConnected } = storeToRefs(useUserStore());
           {{ destination.name }}
         </router-link>
       </div>
-      <div class="dropdown dropdown-end">
+      <div v-if="isConnected" class="dropdown dropdown-end">
         <cart-button size="8" />
         <cart-menu />
       </div>

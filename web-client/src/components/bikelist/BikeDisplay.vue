@@ -2,6 +2,9 @@
 import type { Bike } from "@/stores/bikes";
 import { computed, reactive } from "vue";
 import DataTable from "@/components/scaffold/DataTable.vue";
+import { useCartStore } from "@/stores/cart";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "@/stores/user";
 
 const props = defineProps<{
   bike: Bike;
@@ -39,8 +42,22 @@ const columns = [
   { name: "Stars", accessor: "stars" },
 ];
 
+const { isConnected } = storeToRefs(useUserStore());
+const { addToCart } = useCartStore();
+
 function onAddToCart() {
-  // TODO: Add bike to cart
+  addToCart(bike.id)
+    .then((res) => {
+      if (!res) throw new Error();
+      if (res === "incart") {
+        console.log("Already in cart"); // TODO: Add a toast
+      } else {
+        console.log("Added to cart"); // TODO: Add a toast
+      }
+    })
+    .catch(() => {
+      console.log("Failed to add to cart"); // TODO: Add a toast
+    });
 }
 </script>
 
@@ -77,7 +94,7 @@ function onAddToCart() {
         </div>
       </div>
 
-      <div class="card-actions justify-end">
+      <div v-if="isConnected" class="card-actions justify-end">
         <button class="btn btn-primary" @click="onAddToCart">
           Add to cart
         </button>

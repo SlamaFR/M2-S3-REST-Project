@@ -5,9 +5,9 @@ import { computedAsync } from "@vueuse/core";
 import BikeDisplay from "@/components/bikelist/BikeDisplay.vue";
 
 const router = useRouter();
-const { get } = useBikesStore();
+const { getBike } = useBikesStore();
 const id = router.currentRoute.value.params.id.toString();
-const bike = computedAsync(async () => await get(id));
+const bike = computedAsync(async () => await getBike(id));
 </script>
 
 <template>
