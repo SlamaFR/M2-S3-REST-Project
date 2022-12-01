@@ -24,17 +24,8 @@ subprojects {
 }
 
 
-configure(listOf(":users-server", ":bikes-server", ":gustave-bike-service", ":webservice").map(::project)) {
+configure(listOf(":users-server", ":bikes-server", ":webservice", ":webserver").map(::project)) {
     dependencies {
         implementation(project(":common"))
-    }
-}
-
-project(":gustave-bike-service") {
-    apply(plugin = "war")
-
-    dependencies {
-        compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
-        compileOnly("jakarta.xml.ws:jakarta.xml.ws-api:3.0.1")
     }
 }

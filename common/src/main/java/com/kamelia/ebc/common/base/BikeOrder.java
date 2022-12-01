@@ -7,7 +7,7 @@ import java.util.Objects;
 public record BikeOrder(
     Bike bike,
     Instant instant,
-    Comment comment,
+    String comment,
     ReturnState state
 ) implements Serializable {
 

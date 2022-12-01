@@ -1,7 +1,5 @@
 package com.kamelia.webservice.dto;
 
-import java.time.Instant;
-
 public class Order {
 
     private long date;

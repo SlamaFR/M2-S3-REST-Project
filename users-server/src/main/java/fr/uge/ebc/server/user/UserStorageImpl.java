@@ -1,7 +1,5 @@
 package fr.uge.ebc.server.user;
 
-import com.kamelia.ebc.common.base.Notifier;
-import com.kamelia.ebc.common.base.NotifiableUser;
 import com.kamelia.ebc.common.base.RemoteOptional;
 import com.kamelia.ebc.common.base.Response;
 import com.kamelia.ebc.common.base.User;

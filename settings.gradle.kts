@@ -3,6 +3,6 @@ include(
     ":common",
     ":bikes-server",
     ":users-server",
-    ":gustave-bike-service",
-    ":webservice"
+    ":webservice",
+    ":webserver"
 )

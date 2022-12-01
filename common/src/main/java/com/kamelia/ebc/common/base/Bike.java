@@ -1,5 +1,7 @@
 package com.kamelia.ebc.common.base;
 
+import com.kamelia.ebc.common.util.Pair;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
