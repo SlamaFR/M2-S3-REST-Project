@@ -12,12 +12,16 @@ public interface UserStorage extends Remote {
 
     RemoteOptional<User> findByUsername(String username) throws RemoteException;
 
-    Response<NotifiableUser> save(String username, String password, Notifier notifier) throws RemoteException;
+    boolean save(String username, String password) throws RemoteException;
 
-    Response<Pair<NotifiableUser, UUID>> login(String username, String password) throws RemoteException;
+    Response<UUID> login(String username, String password) throws RemoteException;
 
-    void logout(UUID sessionId) throws RemoteException;
+    Response<List<String>> notifications(UUID sessionToken) throws RemoteException;
 
-    boolean isAuthenticated(UUID userId, UUID sessionToken) throws RemoteException;
+    void logout(UUID sessionToken) throws RemoteException;
+
+    RemoteOptional<UUID> isAuthenticated(UUID sessionToken) throws RemoteException;
+
+    void addNotification(UUID userId, String notification) throws RemoteException;
 
 }

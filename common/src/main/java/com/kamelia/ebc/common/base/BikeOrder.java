@@ -6,7 +6,6 @@ import java.util.Objects;
 
 public record BikeOrder(
     Bike bike,
-    User author,
     Instant instant,
     Comment comment,
     ReturnState state
@@ -14,7 +13,6 @@ public record BikeOrder(
 
     public BikeOrder {
         Objects.requireNonNull(bike);
-        Objects.requireNonNull(author);
         Objects.requireNonNull(instant);
         Objects.requireNonNull(comment);
         Objects.requireNonNull(state);

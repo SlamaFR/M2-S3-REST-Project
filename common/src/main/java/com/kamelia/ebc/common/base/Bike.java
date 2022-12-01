@@ -15,6 +15,6 @@ public interface Bike extends Remote {
 
     RemoteOptional<User> orderer() throws RemoteException;
 
-    List<BikeOrder> ordersHistory() throws RemoteException;
+    List<Pair<User, BikeOrder>> ordersHistory() throws RemoteException;
 
 }

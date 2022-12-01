@@ -6,11 +6,12 @@ import com.kamelia.ebc.common.base.RemoteOptional;
 import com.kamelia.ebc.common.base.Response;
 import com.kamelia.ebc.common.base.User;
 import com.kamelia.ebc.common.base.UserStorage;
-import com.kamelia.ebc.common.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -20,14 +21,14 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     private final HashMap<String, UserImpl> nameToUser;
     private final HashMap<UUID, User> sessionToUser;
     private final HashMap<UUID, UUID> userIdToSession;
-    private final HashMap<UUID, Notifier> userIdToNotifier;
+    private final HashMap<UUID, List<String>> userIdToNotifications;
 
     public UserStorageImpl() throws RemoteException {
         this.idToUser = new HashMap<>();
         this.nameToUser = new HashMap<>();
         this.sessionToUser = new HashMap<>();
         this.userIdToSession = new HashMap<>();
-        this.userIdToNotifier = new HashMap<>();
+        this.userIdToNotifications = new HashMap<>();
     }
 
     @Override
@@ -43,28 +44,22 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     }
 
     @Override
-    public Response<NotifiableUser> save(
-        String username,
-        String password,
-        Notifier notifyStrategy
-    ) throws RemoteException {
+    public boolean save(String username, String password) throws RemoteException {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
-        Objects.requireNonNull(notifyStrategy);
         if (nameToUser.containsKey(username)) {
-            return Response.badRequest("Username already taken");
+            return false;
         }
         var hashedPassword = hashPassword(password);
         var user = new UserImpl(UUID.randomUUID(), username, hashedPassword);
 
         idToUser.put(user.id(), user);
         nameToUser.put(user.username(), user);
-        userIdToNotifier.put(user.id(), notifyStrategy);
-        return Response.ok(new NotifiableUser(user, notifyStrategy));
+        return true;
     }
 
     @Override
-    public Response<Pair<NotifiableUser, UUID>> login(String username, String password) throws RemoteException {
+    public Response<UUID> login(String username, String password) throws RemoteException {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
@@ -88,25 +83,43 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
             return Response.badRequest("Already logged in");
         }
 
-        var notifyStrategy = userIdToNotifier.get(user.id());
-        return Response.ok(new Pair<>(new NotifiableUser(user, notifyStrategy), sessionId));
+        return Response.ok(sessionId);
     }
 
     @Override
     public void logout(UUID sessionId) throws RemoteException {
         Objects.requireNonNull(sessionId);
-        var user = sessionToUser.remove(sessionId);
-        if (user == null) {
-            return;
-        }
-        userIdToSession.remove(user.id());
+        sessionToUser.remove(sessionId);
     }
 
     @Override
-    public boolean isAuthenticated(UUID userId, UUID sessionId) throws RemoteException {
-        Objects.requireNonNull(userId);
+    public RemoteOptional<UUID> isAuthenticated(UUID sessionId) throws RemoteException {
         Objects.requireNonNull(sessionId);
-        return userIdToSession.get(userId).equals(sessionId);
+        var user = sessionToUser.get(sessionId);
+        if (user == null) {
+            return RemoteOptional.empty();
+        }
+        return RemoteOptional.ofNullable(userIdToSession.get(user.id()));
+    }
+
+    @Override
+    public Response<List<String>> notifications(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        var user = sessionToUser.get(sessionToken);
+        if (user == null) {
+            return Response.unauthorized("Invalid session token");
+        }
+        return Response.ok(userIdToNotifications.get(sessionToken));
+    }
+
+    @Override
+    public void addNotification(UUID userId, String notification) throws RemoteException {
+        Objects.requireNonNull(userId);
+        Objects.requireNonNull(notification);
+        if (!idToUser.containsKey(userId)) {
+            return;
+        }
+        userIdToNotifications.computeIfAbsent(userId, ignored -> new ArrayList<>()).add(notification);
     }
 
     private static String hashPassword(String password) {

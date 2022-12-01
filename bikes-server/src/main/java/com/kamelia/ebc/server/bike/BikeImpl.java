@@ -4,6 +4,7 @@ import com.kamelia.ebc.common.base.Bike;
 import com.kamelia.ebc.common.base.BikeOrder;
 import com.kamelia.ebc.common.base.RemoteOptional;
 import com.kamelia.ebc.common.base.User;
+import com.kamelia.ebc.common.util.Pair;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -16,7 +17,7 @@ class BikeImpl extends UnicastRemoteObject implements Bike {
 
     private final UUID id;
     private final User owner;
-    private final ArrayList<BikeOrder> ordersHistory;
+    private final ArrayList<Pair<User, BikeOrder>> ordersHistory;
     private User orderer;
     private boolean removedFromOrders;
 
@@ -50,7 +51,7 @@ class BikeImpl extends UnicastRemoteObject implements Bike {
     }
 
     @Override
-    public List<BikeOrder> ordersHistory() throws RemoteException {
+    public List<Pair<User, BikeOrder>> ordersHistory() throws RemoteException {
         return List.copyOf(ordersHistory);
     }
 
@@ -58,9 +59,10 @@ class BikeImpl extends UnicastRemoteObject implements Bike {
         this.orderer = orderer;
     }
 
-    void addOrder(BikeOrder order) {
-        Objects.requireNonNull(orderer);
-        ordersHistory.add(order);
+    void addOrder(User user, BikeOrder order) {
+        Objects.requireNonNull(user);
+        Objects.requireNonNull(order);
+        ordersHistory.add(new Pair<>(user, order));
     }
 
     void setRemovedFromOrders() {
