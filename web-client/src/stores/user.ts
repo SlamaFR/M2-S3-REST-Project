@@ -58,7 +58,7 @@ export const useUserStore = defineStore("user", () => {
     cookies.remove("user", { sameSite: "strict", secure: true });
   }
 
-  const rentedBikes = computed(() => distinct(user.value.rentedBikes));
+  const rentedBikes = computed(() => distinct(user.value?.rentedBikes ?? []));
 
   function addBike(bike: Bike) {
     // TODO actual add bike
@@ -67,8 +67,9 @@ export const useUserStore = defineStore("user", () => {
     setUser({ ...user.value, rentedBikes: distinct(rentedBikes) });
   }
 
-  function removeBike(bike: Bike) {
-    // TODO actual remove bike
+  function giveBikeBack(bike: Bike, returnState: string, comment: string) {
+    // TODO actual give bike back
+    console.log("return", returnState, comment);
     const rentedBikes = user.value.rentedBikes.filter((b) => b.id !== bike.id);
     setUser({ ...user.value, rentedBikes: distinct(rentedBikes) });
   }
@@ -81,6 +82,6 @@ export const useUserStore = defineStore("user", () => {
     logout,
     rentedBikes,
     addBike,
-    removeBike,
+    removeBike: giveBikeBack,
   };
 });

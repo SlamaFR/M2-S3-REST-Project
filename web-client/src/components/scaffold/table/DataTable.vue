@@ -1,23 +1,12 @@
 <script lang="ts" setup>
-import { computed, defineComponent } from "vue";
-import type { Component } from "vue";
-import CellButton from "@/components/scaffold/table/CellButton.vue";
-
-interface Accessor {
-  name: string;
-  accessor: string | ((row: unknown) => any);
-}
-
-interface Button {
-  name: string;
-  icon: Component;
-  onClick: (event: MouseEvent, row: unknown) => void;
-}
+import { computed } from "vue";
+import type { Column } from "@/components/scaffold/table/column";
+import DataTableRow from "@/components/scaffold/table/DataTableRow.vue";
 
 const props = withDefaults(
   defineProps<{
     data: object[];
-    columns: (Accessor | Button)[];
+    columns: Column[];
     clickable?: boolean;
   }>(),
   {
@@ -30,14 +19,6 @@ defineEmits<{
 }>();
 
 const columnNames = computed(() => props.columns.map((c) => c.name));
-
-function getCellValue(row: any, accessor: string | ((row: any) => any)) {
-  if (typeof accessor === "string") {
-    return row[accessor];
-  } else {
-    return accessor(row);
-  }
-}
 </script>
 
 <template>
@@ -58,34 +39,12 @@ function getCellValue(row: any, accessor: string | ((row: any) => any)) {
           class="hover hover:cursor-pointer"
           @click.prevent="$emit('row-click', $event, item)"
         >
-          <th>{{ index + 1 }}</th>
-          <td v-for="column of columns" :key="column.name">
-            <span v-if="'accessor' in column">{{
-              getCellValue(item, column.accessor)
-            }}</span>
-            <CellButton
-              v-else
-              :item="item"
-              :icon="column.icon"
-              @click="column.onClick"
-            />
-          </td>
+          <data-table-row :line="index + 1" :item="item" :columns="columns" />
         </tr>
       </tbody>
       <tbody v-else>
         <tr v-for="(item, index) in data" :key="index">
-          <th>{{ index + 1 }}</th>
-          <td v-for="column of columns" :key="column.name">
-            <span v-if="'accessor' in column">{{
-              getCellValue(item, column.accessor)
-            }}</span>
-            <cell-button
-              v-else
-              :item="item"
-              :icon="column.icon"
-              @click="column.onClick"
-            />
-          </td>
+          <data-table-row :line="index + 1" :item="item" :columns="columns" />
         </tr>
       </tbody>
     </table>

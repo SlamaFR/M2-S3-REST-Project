@@ -2,12 +2,17 @@
 withDefaults(
   defineProps<{
     label: string;
+    head: string;
     modelValue: string;
     errors: string[];
-    type?: string;
+    values: {
+      key: string;
+      value: any;
+    }[];
   }>(),
   {
     modelValue: "",
+    head: "Select one",
   }
 );
 
@@ -21,12 +26,16 @@ defineEmits<{
     <label class="label">
       <span class="label-text">{{ label }}</span>
     </label>
-    <input
-      :type="type ?? 'text'"
-      class="input input-bordered"
+    <select
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-    />
+      class="select select-bordered w-full max-w-xs border"
+    >
+      <option disabled selected>{{ head }}</option>
+      <option v-for="value in values" :key="value.key" :value="value.value">
+        {{ value.key }}
+      </option>
+    </select>
     <span v-if="errors.length" class="text-error">{{ errors[0] }}</span>
   </div>
 </template>

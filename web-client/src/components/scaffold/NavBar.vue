@@ -25,7 +25,7 @@ const { user, isConnected } = storeToRefs(useUserStore());
       <div class="dropdown dropdown-end btn-group">
         <router-link
           v-for="destination in destinations.filter((d) =>
-            isConnected ? true : !d['connected']
+            d['connected'] ? isConnected : true
           )"
           :key="destination.name"
           :to="destination.path"
