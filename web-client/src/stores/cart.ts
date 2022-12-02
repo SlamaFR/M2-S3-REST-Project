@@ -25,7 +25,7 @@ export const useCartStore = defineStore("cart", () => {
     cookies.set("cart", newCart, {
       sameSite: "strict",
       secure: true,
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 365,
     });
   }
 

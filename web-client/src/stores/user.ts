@@ -28,7 +28,7 @@ export const useUserStore = defineStore("user", () => {
   function setUser(user: User) {
     cookies.set("user", user, {
       sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 365,
       secure: true,
     });
   }
