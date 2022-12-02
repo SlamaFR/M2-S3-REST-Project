@@ -4,10 +4,12 @@ import * as yup from "yup";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import InputField from "@/components/form/InputField.vue";
+import { useToast } from "@/stores/toasts";
 
 const router = useRouter();
 
 const { login } = useUserStore();
+const { pushToast } = useToast();
 
 const form = useForm();
 const { value: username, errors: usernameErrors } = useField<string>(
@@ -31,7 +33,10 @@ function onSubmit() {
       form.resetForm();
       return login(usernameValue, passwordValue);
     })
-    .catch((err) => console.log(err)); // TODO: handle error
+    .then(() => {
+      pushToast("success", "Successfully logged in");
+    })
+    .catch(() => pushToast("error", "Could not login"));
 }
 </script>
 

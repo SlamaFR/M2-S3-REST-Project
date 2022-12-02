@@ -7,6 +7,7 @@ import type { Bike } from "@/stores/bikes";
 import { useRouter } from "vue-router";
 import { TrashIcon } from "vue-tabler-icons";
 import { useUserStore } from "@/stores/user";
+import { useToast } from "@/stores/toasts";
 
 const router = useRouter();
 
@@ -16,8 +17,11 @@ const cartStore = useCartStore();
 const { cart, count, subtotal } = storeToRefs(cartStore);
 const { removeFromCart, clearCart } = cartStore;
 
+const { pushToast } = useToast();
+
 function onRemove(event: MouseEvent, bike: Bike) {
   removeFromCart(bike.id);
+  pushToast("info", "Removed from cart");
 }
 
 const data = computed<Bike[]>(() => cart.value.bikes);
@@ -43,6 +47,7 @@ function onRowClick(event: MouseEvent, bike: Bike) {
 function onOrder() {
   cart.value.bikes.forEach((bike) => addBike(bike));
   clearCart().then();
+  pushToast("success", "Order placed");
 }
 </script>
 

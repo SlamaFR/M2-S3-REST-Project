@@ -3,6 +3,7 @@ import { RouterView } from "vue-router";
 import NavBar from "@/components/scaffold/NavBar.vue";
 import { computed, ref } from "vue";
 import { useWindowSize } from "@vueuse/core";
+import ToastsContext from "@/components/scaffold/toast/ToastsContext.vue";
 
 const { height: appHeight } = useWindowSize();
 
@@ -20,6 +21,8 @@ const headerHeight = computed(() => header.value?.clientHeight ?? 0);
   >
     <router-view />
   </main>
+
+  <toasts-context />
 </template>
 
 <style scoped>

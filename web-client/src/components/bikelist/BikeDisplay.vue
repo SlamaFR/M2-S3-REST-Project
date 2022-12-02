@@ -5,6 +5,7 @@ import DataTable from "@/components/scaffold/table/DataTable.vue";
 import { useCartStore } from "@/stores/cart";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
+import { useToast } from "@/stores/toasts";
 
 const props = defineProps<{
   bike: Bike;
@@ -45,14 +46,16 @@ const columns = [
 const { isConnected } = storeToRefs(useUserStore());
 const { addToCart, cartContains } = useCartStore();
 
+const { pushToast } = useToast();
+
 function onAddToCart() {
   addToCart(bike.id)
     .then((res) => {
       if (!res) throw new Error();
-      console.log("Added to cart"); // TODO: Add a toast
+      pushToast("success", "Added to cart");
     })
     .catch(() => {
-      console.log("Failed to add to cart"); // TODO: Add a toast
+      pushToast("error", "Failed to add to cart");
     });
 }
 </script>

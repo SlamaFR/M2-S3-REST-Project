@@ -4,6 +4,7 @@ import * as yup from "yup";
 import type { Bike } from "@/stores/bikes";
 import InputField from "@/components/form/InputField.vue";
 import SelectField from "@/components/form/SelectField.vue";
+import { useToast } from "@/stores/toasts";
 
 const props = defineProps<{
   bike: Bike;
@@ -16,6 +17,8 @@ const emit = defineEmits<{
   ): void;
   (e: "cancel"): void;
 }>();
+
+const { pushToast } = useToast();
 
 const form = useForm();
 const { value: returnState, errors: returnStateErrors } = useField<string>(
@@ -44,7 +47,7 @@ function onSubmit() {
       });
       form.resetForm();
     })
-    .catch((err) => console.log(err)); // TODO: handle error
+    .catch(() => pushToast("error", "Could not submit form"));
 }
 </script>
 
