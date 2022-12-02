@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.rmi.RemoteException;
 
-@RestController
+@Controller
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
@@ -39,6 +39,14 @@ public class AuthenticationController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+        String sessionId
+    ) throws RemoteException {
+        userService.logout(UUID.fromString(sessionId));
+        return ResponseEntity.ok().build();
     }
 
 }

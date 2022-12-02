@@ -27,12 +27,9 @@ public class BikeService {
         return bikeStorage.allBikes().orElseThrow();
     }
 
-    public Set<Bike> getBikesOrderedByUser(UUID sessionId) throws RemoteException {
-        var optionalBikes = bikeStorage.userOrderedBikes(null);
-        if (optionalBikes.isEmpty()) {
-            throw new NotFoundException("No bikes found for user");
-        }
-        return optionalBikes.get();
+    public Set<Bike> getUserOrderedBikes(UUID sessionId) throws RemoteException {
+        Objects.requireNonNull(sessionId);
+        return bikeStorage.userOrderedBikes(sessionId).orElseThrow();
     }
 
     public BikeState orderBike(UUID sessionId, UUID bikeId) throws RemoteException {
@@ -42,6 +39,10 @@ public class BikeService {
     }
 
     public void returnBike(UUID sessionId, UUID bikeId, String comment, ReturnState state) throws RemoteException {
+        Objects.requireNonNull(sessionId);
+        Objects.requireNonNull(bikeId);
+        Objects.requireNonNull(comment);
+        Objects.requireNonNull(state);
         var optionalBike = bikeStorage.findById(bikeId);
         if (optionalBike.isEmpty()) {
             throw new NotFoundException("Bike not found");
@@ -51,5 +52,15 @@ public class BikeService {
             .orElseThrow();
     }
 
+    public Bike addBike(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        return bikeStorage.addOwnedBike(sessionToken).orElseThrow();
+    }
+
+    public void removeBike(UUID sessionToken, UUID bikeId) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        Objects.requireNonNull(bikeId);
+        bikeStorage.removeOwnedBike(bikeId, sessionToken).orElseThrow();
+    }
 
 }

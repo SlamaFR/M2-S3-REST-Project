@@ -54,16 +54,17 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     }
 
     @Override
-    public Response<Bike> addOwnedBike(User owner, UUID sessionToken) throws RemoteException {
-        Objects.requireNonNull(owner);
+    public Response<Bike> addOwnedBike(UUID sessionToken) throws RemoteException {
         Objects.requireNonNull(sessionToken);
 
-        if (!checkAuth(sessionToken)) {
+        var opt = userStorage.isAuthenticated(sessionToken);
+        if (opt.isEmpty()) {
             return notAuthenticated();
         }
+        var user = userStorage.findById(opt.get()).get();
 
         var id = UUID.randomUUID();
-        var bike = new BikeImpl(id, owner);
+        var bike = new BikeImpl(id, user);
         idToBike.put(bike.id(), bike);
         return Response.ok(bike);
     }
@@ -183,19 +184,23 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     }
 
     @Override
-    public RemoteOptional<Set<Bike>> userOwnedBikes(User user) throws RemoteException {
-        Objects.requireNonNull(user);
-        return userBikes(user, userIdToOwnedBikes);
+    public Response<Set<Bike>> userOwnedBikes(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        var opt = userStorage.isAuthenticated(sessionToken);
+        if (opt.isEmpty()) {
+            return notAuthenticated();
+        }
+        return userBikes(opt.get(), userIdToOwnedBikes);
     }
 
     @Override
-    public RemoteOptional<Set<Bike>> userOrderedBikes(User user) throws RemoteException {
-        Objects.requireNonNull(user);
-        return userBikes(user, userIdToOrderedBikes);
-    }
-
-    private boolean checkAuth(UUID token) throws RemoteException {
-        return userStorage.isAuthenticated(token).isPresent();
+    public Response<Set<Bike>> userOrderedBikes(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        var opt = userStorage.isAuthenticated(sessionToken);
+        if (opt.isEmpty()) {
+            return notAuthenticated();
+        }
+        return userBikes(opt.get(), userIdToOrderedBikes);
     }
 
     private void orderBikeForNextUserInQueue(BikeImpl bike) throws RemoteException {
@@ -233,11 +238,12 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         return Response.unauthorized("User is not authenticated");
     }
 
-    private static RemoteOptional<Set<Bike>> userBikes(
-        User user,
+    private static Response<Set<Bike>> userBikes(
+        UUID userId,
         HashMap<UUID, HashSet<Bike>> map
     ) throws RemoteException {
-        var set = map.get(user.id());
-        return set == null ? RemoteOptional.empty() : RemoteOptional.ofNullable(Set.copyOf(set));
+        var set = map.get(userId);
+        var cpy = set == null ? null : Set.copyOf(set);
+        return Response.ok(cpy);
     }
 }

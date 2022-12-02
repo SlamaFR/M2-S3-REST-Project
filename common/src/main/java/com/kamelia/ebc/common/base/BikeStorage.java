@@ -13,15 +13,15 @@ public interface BikeStorage extends Remote {
 
     Response<Set<Bike>> availableBikes() throws RemoteException;
 
-    RemoteOptional<Set<Bike>> userOwnedBikes(User user) throws RemoteException;
+    Response<Set<Bike>> userOwnedBikes(UUID sessionToken) throws RemoteException;
 
-    RemoteOptional<Set<Bike>> userOrderedBikes(User user) throws RemoteException;
+    Response<Set<Bike>> userOrderedBikes(UUID sessionToken) throws RemoteException;
 
     Response<BikeState> orderBike(UUID bikeId, UUID sessionToken) throws RemoteException;
 
     Response<Void> returnBike(BikeOrder order, UUID sessionToken) throws RemoteException;
 
-    Response<Bike> addOwnedBike(User owner, UUID sessionToken) throws RemoteException;
+    Response<Bike> addOwnedBike(UUID sessionToken) throws RemoteException;
 
     Response<Void> removeOwnedBike(UUID bikeId, UUID sessionToken) throws RemoteException;
 
