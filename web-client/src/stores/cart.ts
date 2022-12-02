@@ -6,7 +6,7 @@ import { useCookies } from "@vueuse/integrations/useCookies";
 import { useUserStore } from "@/stores/user";
 
 interface Cart {
-  userId: string;
+  user: string;
   bikes: Bike[];
 }
 
@@ -31,8 +31,8 @@ export const useCartStore = defineStore("cart", () => {
 
   const cart = computed<Cart>(() => {
     const cart: Cart = cookies.get("cart");
-    if (!cart || cart.userId !== user.value.id) {
-      const newCart: Cart = { userId: user.value.id, bikes: [] };
+    if (!cart || cart.user !== user.value.username) {
+      const newCart: Cart = { user: user.value.username, bikes: [] };
       setCart(newCart);
       return newCart;
     }
@@ -47,8 +47,8 @@ export const useCartStore = defineStore("cart", () => {
     const bike = await getBike(id);
     if (!bike) return false;
     if (cart.value.bikes.some((bike) => bike.id === id)) return false;
-    const { userId, bikes } = cart.value;
-    const newCart: Cart = { userId, bikes: [...bikes, bike] };
+    const { user, bikes } = cart.value;
+    const newCart: Cart = { user, bikes: [...bikes, bike] };
     setCart(newCart);
     return true;
   }
@@ -57,12 +57,12 @@ export const useCartStore = defineStore("cart", () => {
     const bike = await getBike(id);
     if (!bike) return false;
     const newCart = cart.value.bikes.filter((b) => b.id !== bike.id);
-    setCart({ userId: cart.value.userId, bikes: newCart });
+    setCart({ user: cart.value.user, bikes: newCart });
     return true;
   }
 
   async function clearCart() {
-    setCart({ userId: cart.value.userId, bikes: [] });
+    setCart({ user: cart.value.user, bikes: [] });
   }
 
   function cartContains(id: string): boolean {
