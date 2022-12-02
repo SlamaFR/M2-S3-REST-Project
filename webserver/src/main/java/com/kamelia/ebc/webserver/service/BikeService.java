@@ -6,6 +6,8 @@ import com.kamelia.ebc.common.base.BikeState;
 import com.kamelia.ebc.common.base.BikeStorage;
 import com.kamelia.ebc.common.base.ReturnState;
 import com.kamelia.ebc.common.util.NotFoundException;
+import com.kamelia.ebc.webserver.dto.BikeDTO;
+import com.kamelia.ebc.webserver.util.Mappings;
 import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
@@ -13,6 +15,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BikeService {
@@ -23,8 +26,12 @@ public class BikeService {
         this.bikeStorage = bikeStorage;
     }
 
-    public Set<Bike> getAllBikes() throws RemoteException {
-        return bikeStorage.allBikes().orElseThrow();
+    public Set<BikeDTO> getAllBikes() throws RemoteException {
+        return bikeStorage.allBikes()
+            .orElseThrow()
+            .stream()
+            .map(Mappings::bikeToDTO)
+            .collect(Collectors.toSet());
     }
 
     public Set<Bike> getUserOrderedBikes(UUID sessionId) throws RemoteException {
