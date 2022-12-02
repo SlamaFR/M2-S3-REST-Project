@@ -1,5 +1,6 @@
 package com.kamelia.ebc.webserver.controller;
 
+import com.kamelia.ebc.webserver.dto.CredentialsDTO;
 import com.kamelia.ebc.webserver.dto.LoginDTO;
 import com.kamelia.ebc.webserver.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,30 +26,22 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginDTO> login(
-        String username,
-        String password
-    ) throws RemoteException {
-        var sessionId = userService.login(username, password);
+    public ResponseEntity<LoginDTO> login(@RequestBody CredentialsDTO credentialsDTO) throws RemoteException {
+        var sessionId = userService.login(credentialsDTO.username(), credentialsDTO.password());
         return ResponseEntity.ok(new LoginDTO(sessionId));
     }
 
     @PutMapping("/register")
-    public ResponseEntity<Void> register(
-        String username,
-        String password
-    ) throws RemoteException {
-        if (userService.register(username, password)) {
+    public ResponseEntity<Void> register(@RequestBody CredentialsDTO credentialsDTO) throws RemoteException {
+        if (userService.register(credentialsDTO.username(), credentialsDTO.password())) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(
-        String sessionId
-    ) throws RemoteException {
-        userService.logout(UUID.fromString(sessionId));
+    public ResponseEntity<Void> logout(@RequestBody LoginDTO loginDTO) throws RemoteException {
+        userService.logout(loginDTO.sessionId());
         return ResponseEntity.ok().build();
     }
 

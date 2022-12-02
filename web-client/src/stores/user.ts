@@ -2,9 +2,9 @@ import { defineStore } from "pinia";
 import { computed } from "vue";
 import { useCookies } from "@vueuse/integrations/useCookies";
 import type { Bike } from "@/stores/bikes";
+import { axiosInstance } from "@/utils/axiosConfig";
 
 export interface User {
-  id: string;
   username: string;
   token: string;
   rentedBikes: Bike[];
@@ -35,11 +35,14 @@ export const useUserStore = defineStore("user", () => {
 
   async function login(username: string, password: string): Promise<boolean> {
     await logout();
-    // TODO actual login
-    setUser({
-      id: "a381e5b8-06c6-4166-9fe0-01339b36ef63",
+    const response = await axiosInstance.post("/auth/login", {
       username,
-      token: "token",
+      password,
+    });
+    if (response.status !== 200) throw new Error("Login failed");
+    setUser({
+      username,
+      token: response.data.sessionId,
       rentedBikes: [],
     });
     return true;
@@ -49,18 +52,27 @@ export const useUserStore = defineStore("user", () => {
     username: string,
     password: string
   ): Promise<boolean> {
-    // TODO actual register
+    const response = await axiosInstance.put("/auth/register", {
+      username,
+      password,
+    });
+    if (response.status !== 200) throw new Error("Register failed");
     return await login(username, password);
   }
 
   async function logout() {
-    // TODO actual logout
+    if (!isConnected.value) return;
+    const response = await axiosInstance.post("/auth/logout", {
+      sessionId: user.value.token,
+    });
+    if (response.status !== 200) throw new Error("Logout failed");
     cookies.remove("user", { sameSite: "strict", secure: true });
   }
 
   const rentedBikes = computed(() => distinct(user.value?.rentedBikes ?? []));
 
   function addBike(bike: Bike) {
+    if (!isConnected.value) return;
     // TODO actual add bike
     user.value.rentedBikes.push(bike);
     const rentedBikes = [...user.value.rentedBikes, bike];
@@ -68,9 +80,10 @@ export const useUserStore = defineStore("user", () => {
   }
 
   function giveBikeBack(bike: Bike, returnState: string, comment: string) {
+    if (!isConnected.value) return;
     // TODO actual give bike back
     console.log("return", returnState, comment);
-    const rentedBikes = user.value.rentedBikes.filter((b) => b.id !== bike.id);
+    const rentedBikes = user.value?.rentedBikes.filter((b) => b.id !== bike.id);
     setUser({ ...user.value, rentedBikes: distinct(rentedBikes) });
   }
 

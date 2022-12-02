@@ -43,7 +43,7 @@ function onSubmit() {
     .then(() => {
       pushToast("success", "Successfully registered");
     })
-    .catch(() => pushToast("error", "Could not register"));
+    .catch((err) => pushToast("error", err));
 }
 </script>
 

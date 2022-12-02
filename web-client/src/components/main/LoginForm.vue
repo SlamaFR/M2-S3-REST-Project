@@ -36,7 +36,7 @@ function onSubmit() {
     .then(() => {
       pushToast("success", "Successfully logged in");
     })
-    .catch(() => pushToast("error", "Could not login"));
+    .catch((err) => pushToast("error", err));
 }
 </script>
 
