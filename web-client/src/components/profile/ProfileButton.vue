@@ -28,7 +28,6 @@ function onClickLogout() {
       </div>
     </label>
     <ul tabindex="0" class="profile-menu">
-      <li><a>Profile</a></li>
       <li><a @click.prevent="onClickLogout">Logout</a></li>
     </ul>
   </div>
