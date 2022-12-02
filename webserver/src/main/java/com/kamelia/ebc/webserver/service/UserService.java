@@ -5,15 +5,16 @@ import com.kamelia.ebc.common.util.UnauthorizedException;
 import org.springframework.stereotype.Service;
 
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class AuthenticationService {
+public class UserService {
 
     private final UserStorage userStorage;
 
-    public AuthenticationService(UserStorage userStorage) {
+    public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -30,9 +31,9 @@ public class AuthenticationService {
             .orElseThrow((state, message) -> new UnauthorizedException(message));
     }
 
-    public void logout(UUID sessionId) throws RemoteException {
-        Objects.requireNonNull(sessionId);
-        userStorage.logout(sessionId);
+    public void logout(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        userStorage.logout(sessionToken);
     }
 
 }

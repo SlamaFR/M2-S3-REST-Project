@@ -1,24 +1,26 @@
 package com.kamelia.ebc.webserver.controller;
 
 import com.kamelia.ebc.webserver.dto.LoginDTO;
-import com.kamelia.ebc.webserver.service.AuthenticationService;
+import com.kamelia.ebc.webserver.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.rmi.RemoteException;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
+    public AuthenticationController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -26,7 +28,7 @@ public class AuthenticationController {
         String username,
         String password
     ) throws RemoteException {
-        var sessionId = authenticationService.login(username, password);
+        var sessionId = userService.login(username, password);
         return ResponseEntity.ok(new LoginDTO(sessionId));
     }
 
@@ -35,7 +37,7 @@ public class AuthenticationController {
         String username,
         String password
     ) throws RemoteException {
-        if (authenticationService.register(username, password)) {
+        if (userService.register(username, password)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
