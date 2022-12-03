@@ -2,12 +2,10 @@ package com.kamelia.ebc.webserver.service;
 
 import com.kamelia.ebc.common.base.UserStorage;
 import com.kamelia.ebc.common.util.UnauthorizedException;
-import org.springframework.stereotype.Service;
-
 import java.rmi.RemoteException;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {

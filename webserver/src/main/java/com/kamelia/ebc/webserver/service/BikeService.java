@@ -53,8 +53,7 @@ public class BikeService {
             throw new NotFoundException("Bike not found");
         }
         var bike = optionalBike.get();
-        bikeStorage.returnBike(new BikeOrder(bike, Instant.now(), comment, state), sessionId)
-            .orElseThrow();
+        bikeStorage.returnBike(new BikeOrder(bike, Instant.now(), comment, state), sessionId);
     }
 
     public List<String> notifications(UUID sessionToken) throws RemoteException {

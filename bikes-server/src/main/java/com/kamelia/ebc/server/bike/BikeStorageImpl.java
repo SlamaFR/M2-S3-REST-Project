@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage {
 
     private final HashMap<UUID, BikeImpl> idToBike;
-    private final HashMap<UUID, HashSet<Bike>> userIdToOwnedBikes;
-    private final HashMap<UUID, HashSet<Bike>> userIdToOrderedBikes;
+    private final HashMap<UUID, Set<UUID>> userIdToOwnedBikes;
+    private final HashMap<UUID, Set<UUID>> userIdToOrderedBikes;
     private final HashMap<UUID, ArrayDeque<UUID>> bikeToOrderQueue;
     private final HashMap<UUID, List<String>> userIdToNotifications;
     private final UserStorage userStorage;
