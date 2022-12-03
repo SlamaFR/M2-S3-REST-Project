@@ -5,7 +5,7 @@
   <service name="Hello" provider="java:RPC" style="wrapped" use="literal">
       <parameter name="wsdlTargetNamespace" value="http://service.webservice.kamelia.com"/>
       <parameter name="wsdlServiceElement" value="HelloService"/>
-      <parameter name="schemaQualified" value="http://dto.webservice.kamelia.com,http://webservice.kamelia.com,http://service.webservice.kamelia.com"/>
+      <parameter name="schemaQualified" value="http://webservice.kamelia.com,http://dto.webservice.kamelia.com,http://service.webservice.kamelia.com"/>
       <parameter name="wsdlServicePort" value="Hello"/>
       <parameter name="className" value="com.kamelia.webservice.service.Hello"/>
       <parameter name="wsdlPortType" value="Hello"/>
@@ -13,15 +13,15 @@
       <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="sayHello" qname="operNS:sayHello" returnQName="retNS:sayHelloReturn" returnType="rtns:string" soapAction="">
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:name" type="tns:string"/>
       </operation>
-      <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://dto.webservice.kamelia.com" name="bigTest" qname="operNS:bigTest" returnQName="retNS:bigTestReturn" returnType="rtns:Bike" soapAction="">
-      </operation>
       <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://webservice.kamelia.com" name="sayFooe" qname="operNS:sayFooe" returnQName="retNS:sayFooeReturn" returnType="rtns:Foo" soapAction="">
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:test" type="tns:string"/>
       </operation>
+      <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://dto.webservice.kamelia.com" name="bigTest" qname="operNS:bigTest" returnQName="retNS:bigTestReturn" returnType="rtns:Bike" soapAction="">
+      </operation>
       <parameter name="allowedMethods" value="bigTest sayHello sayFooe"/>
 
+      <arrayMapping xmlns:ns="http://service.webservice.kamelia.com" xmlns:cmp-ns="http://dto.webservice.kamelia.com" qname="ns:ArrayOf_tns2_Order" type="java:com.kamelia.webservice.dto.Order[]" innerType="cmp-ns:Order" encodingStyle=""/>
       <typeMapping xmlns:ns="http://dto.webservice.kamelia.com" qname="ns:ReturnState" type="java:com.kamelia.webservice.dto.ReturnState" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
-      <arrayMapping xmlns:ns="http://service.webservice.kamelia.com" xmlns:cmp-ns="http://dto.webservice.kamelia.com" qname="ns:ArrayOf_tns1_Order" type="java:com.kamelia.webservice.dto.Order[]" innerType="cmp-ns:Order" encodingStyle=""/>
       <typeMapping xmlns:ns="http://webservice.kamelia.com" qname="ns:Foo" type="java:com.kamelia.webservice.Foo" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
       <typeMapping xmlns:ns="http://dto.webservice.kamelia.com" qname="ns:Order" type="java:com.kamelia.webservice.dto.Order" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
       <typeMapping xmlns:ns="http://dto.webservice.kamelia.com" qname="ns:Comment" type="java:com.kamelia.webservice.dto.Comment" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>

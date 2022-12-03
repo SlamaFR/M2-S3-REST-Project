@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://service.webservice.kamelia.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://service.webservice.kamelia.com" xmlns:intf="http://service.webservice.kamelia.com" xmlns:tns1="http://dto.webservice.kamelia.com" xmlns:tns2="http://webservice.kamelia.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://service.webservice.kamelia.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://service.webservice.kamelia.com" xmlns:intf="http://service.webservice.kamelia.com" xmlns:tns1="http://webservice.kamelia.com" xmlns:tns2="http://dto.webservice.kamelia.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--WSDL created by Apache Axis version: 1.4
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://service.webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://webservice.kamelia.com"/>
    <import namespace="http://dto.webservice.kamelia.com"/>
+   <import namespace="http://webservice.kamelia.com"/>
    <element name="sayHello">
     <complexType>
      <sequence>
@@ -20,21 +20,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
-   <element name="bigTest">
-    <complexType/>
-   </element>
-   <element name="bigTestResponse">
-    <complexType>
-     <sequence>
-      <element name="bigTestReturn" type="tns1:Bike"/>
-     </sequence>
-    </complexType>
-   </element>
-   <complexType name="ArrayOf_tns1_Order">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:Order"/>
-    </sequence>
-   </complexType>
    <element name="sayFooe">
     <complexType>
      <sequence>
@@ -45,10 +30,35 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <element name="sayFooeResponse">
     <complexType>
      <sequence>
-      <element name="sayFooeReturn" type="tns2:Foo"/>
+      <element name="sayFooeReturn" type="tns1:Foo"/>
      </sequence>
     </complexType>
    </element>
+   <element name="bigTest">
+    <complexType/>
+   </element>
+   <element name="bigTestResponse">
+    <complexType>
+     <sequence>
+      <element name="bigTestReturn" type="tns2:Bike"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_tns2_Order">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns2:Order"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://service.webservice.kamelia.com"/>
+   <import namespace="http://dto.webservice.kamelia.com"/>
+   <complexType name="Foo">
+    <sequence>
+     <element name="ouep" type="xsd:int"/>
+     <element name="test" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
   </schema>
   <schema elementFormDefault="qualified" targetNamespace="http://dto.webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="http://service.webservice.kamelia.com"/>
@@ -67,29 +77,19 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    </complexType>
    <complexType name="Order">
     <sequence>
-     <element name="comment" nillable="true" type="tns1:Comment"/>
+     <element name="comment" nillable="true" type="tns2:Comment"/>
      <element name="date" type="xsd:long"/>
      <element name="orderer" nillable="true" type="xsd:string"/>
-     <element name="state" nillable="true" type="tns1:ReturnState"/>
+     <element name="state" nillable="true" type="tns2:ReturnState"/>
     </sequence>
    </complexType>
    <complexType name="Bike">
     <sequence>
      <element name="availability" nillable="true" type="xsd:string"/>
-     <element name="history" nillable="true" type="impl:ArrayOf_tns1_Order"/>
+     <element name="history" nillable="true" type="impl:ArrayOf_tns2_Order"/>
      <element name="id" nillable="true" type="xsd:string"/>
      <element name="owner" nillable="true" type="xsd:string"/>
      <element name="value" type="xsd:int"/>
-    </sequence>
-   </complexType>
-  </schema>
-  <schema elementFormDefault="qualified" targetNamespace="http://webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
-   <import namespace="http://service.webservice.kamelia.com"/>
-   <import namespace="http://dto.webservice.kamelia.com"/>
-   <complexType name="Foo">
-    <sequence>
-     <element name="ouep" type="xsd:int"/>
-     <element name="test" nillable="true" type="xsd:string"/>
     </sequence>
    </complexType>
   </schema>
@@ -157,18 +157,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="bigTest">
-
-         <wsdl:input message="impl:bigTestRequest" name="bigTestRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:bigTestResponse" name="bigTestResponse">
-
-       </wsdl:output>
-
-      </wsdl:operation>
-
       <wsdl:operation name="sayFooe">
 
          <wsdl:input message="impl:sayFooeRequest" name="sayFooeRequest">
@@ -176,6 +164,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
        </wsdl:input>
 
          <wsdl:output message="impl:sayFooeResponse" name="sayFooeResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="bigTest">
+
+         <wsdl:input message="impl:bigTestRequest" name="bigTestRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:bigTestResponse" name="bigTestResponse">
 
        </wsdl:output>
 
@@ -205,24 +205,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="bigTest">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="bigTestRequest">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="bigTestResponse">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
       <wsdl:operation name="sayFooe">
 
          <wsdlsoap:operation soapAction=""/>
@@ -234,6 +216,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="sayFooeResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="bigTest">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="bigTestRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="bigTestResponse">
 
             <wsdlsoap:body use="literal"/>
 

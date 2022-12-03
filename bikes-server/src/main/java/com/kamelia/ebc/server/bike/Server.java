@@ -26,6 +26,7 @@ class Server {
         var bikeStorage = new BikeStorageImpl(userStorage);
         var server = new Server(bikeStorage);
         server.run(args);
+        System.out.println("Server is running...");
     }
 
 }

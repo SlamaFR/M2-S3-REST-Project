@@ -4,5 +4,6 @@ include(
     ":bikes-server",
     ":users-server",
     ":webservice",
-    ":webserver"
+    ":webserver",
+    ":webservice_client"
 )

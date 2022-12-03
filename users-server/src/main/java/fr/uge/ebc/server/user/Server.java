@@ -22,6 +22,7 @@ class Server {
         var storage = new UserStorageImpl();
         var server = new Server(storage);
         server.run(args);
+        System.out.println("Server is running...");
     }
 
 }
