@@ -6,12 +6,12 @@ import { computed } from "vue";
 import type { Bike } from "@/stores/bikes";
 import { useRouter } from "vue-router";
 import { TrashIcon } from "vue-tabler-icons";
-import { useUserStore } from "@/stores/user";
 import { useToast } from "@/stores/toasts";
+import { useBikesStore } from "@/stores/bikes";
 
 const router = useRouter();
 
-const { addBike } = useUserStore();
+const { orderBikes } = useBikesStore();
 
 const cartStore = useCartStore();
 const { cart, count, subtotal } = storeToRefs(cartStore);
@@ -20,34 +20,35 @@ const { removeFromCart, clearCart } = cartStore;
 const { pushToast } = useToast();
 
 function onRemove(event: MouseEvent, bike: Bike) {
-  removeFromCart(bike.id);
+  removeFromCart(bike.bikeId);
   pushToast("info", "Removed from cart");
 }
 
 const data = computed<Bike[]>(() => cart.value.bikes);
 const columns = [
-  { name: "ID", accessor: "id" },
-  { name: "Owner", accessor: "owner" },
-  {
-    name: "Stars",
-    accessor: (row: Bike) => row.history[0]?.comment?.stars.toString() ?? "N/A",
-  },
+  { name: "ID", accessor: "bikeId" },
+  { name: "Owner", accessor: "ownerName" },
   {
     name: "State",
-    accessor: (row: Bike) => row.history[0]?.returnState?.state ?? "as new",
+    accessor: (row: Bike) => row.history[0]?.returnState ?? "as new",
   },
   { name: "Availability", accessor: "availability" },
   { name: "Remove", icon: TrashIcon, onClick: onRemove },
 ];
 
 function onRowClick(event: MouseEvent, bike: Bike) {
-  router.push(`/bikes/${bike.id}`);
+  router.push(`/bikes/${bike.bikeId}`);
 }
 
 function onOrder() {
-  cart.value.bikes.forEach((bike) => addBike(bike));
-  clearCart().then();
-  pushToast("success", "Order placed");
+  orderBikes(cart.value.bikes.map((bike) => bike.bikeId))
+    .then(() => {
+      pushToast("success", "Order placed");
+      clearCart();
+    })
+    .catch((error) => {
+      pushToast("error", error.message);
+    });
 }
 </script>
 

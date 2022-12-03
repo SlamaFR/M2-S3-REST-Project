@@ -2,33 +2,37 @@
 import DataTable from "@/components/scaffold/table/DataTable.vue";
 import type { Bike } from "@/stores/bikes";
 import { useBikesStore } from "@/stores/bikes";
-import { storeToRefs } from "pinia";
-import { computedAsync, useToggle } from "@vueuse/core";
+import { computedAsync, useAsyncState, useToggle } from "@vueuse/core";
 import { useRouter } from "vue-router";
+import { computed, onMounted, ref, watch } from "vue";
 
 const router = useRouter();
 
 const [filterAvailable, toggleFilterAvailable] = useToggle(false);
-const { all, available } = storeToRefs(useBikesStore());
+const { getAllBikes } = useBikesStore();
+
+const state = ref<Bike[]>([]);
+onMounted(async () => {
+  state.value = await getAllBikes();
+});
 const data = computedAsync<Bike[]>(
-  async () => (filterAvailable.value ? await available.value : await all.value),
+  async () =>
+    filterAvailable.value
+      ? state.value.filter((bike) => bike.availability === "available")
+      : state.value,
   []
 );
 
 function onRowClick(event: MouseEvent, bike: Bike) {
-  router.push(`/bikes/${bike.id}`);
+  router.push(`/bikes/${bike.bikeId}`);
 }
 
 const columns = [
-  { name: "ID", accessor: "id" },
-  { name: "Owner", accessor: "owner" },
-  {
-    name: "Stars",
-    accessor: (row: Bike) => row.history[0]?.comment?.stars.toString() ?? "N/A",
-  },
+  { name: "ID", accessor: "bikeId" },
+  { name: "Owner", accessor: "ownerName" },
   {
     name: "State",
-    accessor: (row: Bike) => row.history[0]?.returnState?.state ?? "as new",
+    accessor: (row: Bike) => row.history[0]?.returnState ?? "as new",
   },
   { name: "Availability", accessor: "availability" },
 ];

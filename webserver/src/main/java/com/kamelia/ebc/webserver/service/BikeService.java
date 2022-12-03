@@ -26,12 +26,16 @@ public class BikeService {
         this.bikeStorage = bikeStorage;
     }
 
-    public Set<BikeDTO> getAllBikes() throws RemoteException {
+    public Set<Bike> getAllBikes() throws RemoteException {
         return bikeStorage.allBikes()
             .orElseThrow()
             .stream()
             .map(Mappings::bikeToDTO)
             .collect(Collectors.toSet());
+    }
+
+    public Bike getBike(UUID bikeId) throws RemoteException {
+        return bikeStorage.findById(bikeId).get();
     }
 
     public Set<Bike> getUserOrderedBikes(UUID sessionId) throws RemoteException {
@@ -69,5 +73,4 @@ public class BikeService {
         Objects.requireNonNull(bikeId);
         bikeStorage.removeOwnedBike(bikeId, sessionToken).orElseThrow();
     }
-
 }

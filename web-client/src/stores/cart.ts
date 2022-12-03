@@ -46,7 +46,8 @@ export const useCartStore = defineStore("cart", () => {
   async function addToCart(id: string): Promise<boolean> {
     const bike = await getBike(id);
     if (!bike) return false;
-    if (cart.value.bikes.some((bike) => bike.id === id)) return false;
+    if (cart.value.bikes.some((bike) => bike.bikeId === id)) return false;
+
     const { user, bikes } = cart.value;
     const newCart: Cart = { user, bikes: [...bikes, bike] };
     setCart(newCart);
@@ -56,17 +57,17 @@ export const useCartStore = defineStore("cart", () => {
   async function removeFromCart(id: string): Promise<boolean> {
     const bike = await getBike(id);
     if (!bike) return false;
-    const newCart = cart.value.bikes.filter((b) => b.id !== bike.id);
+    const newCart = cart.value.bikes.filter((b) => b.bikeId !== bike.bikeId);
     setCart({ user: cart.value.user, bikes: newCart });
     return true;
   }
 
-  async function clearCart() {
+  function clearCart() {
     setCart({ user: cart.value.user, bikes: [] });
   }
 
   function cartContains(id: string): boolean {
-    return cart.value.bikes.some((bike) => bike.id === id);
+    return cart.value.bikes.some((bike) => bike.bikeId === id);
   }
 
   return {

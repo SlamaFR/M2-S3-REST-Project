@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import type { Column } from "@/components/scaffold/table/column";
 import DataTableRow from "@/components/scaffold/table/DataTableRow.vue";
 

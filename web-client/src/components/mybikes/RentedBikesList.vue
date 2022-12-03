@@ -1,30 +1,32 @@
 <script lang="ts" setup>
 import DataTable from "@/components/scaffold/table/DataTable.vue";
 import type { Bike } from "@/stores/bikes";
-import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/user";
+import { useBikesStore } from "@/stores/bikes";
 import { ArrowBarDownIcon } from "vue-tabler-icons";
 import Modal from "@/components/scaffold/Modal.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import GiveBackForm from "@/components/mybikes/GiveBackForm.vue";
+import { useToast } from "@/stores/toasts";
 
-const userStore = useUserStore();
-const { rentedBikes: data } = storeToRefs(userStore);
-const { removeBike } = userStore;
+const { getRentedBikes, returnBike } = useBikesStore();
+
+const { pushToast } = useToast();
+
+const data = ref<Bike[]>([]);
+async function fetch() {
+  data.value = await getRentedBikes();
+}
+onMounted(() => fetch().then());
 
 const showGiveBackModal = ref(false);
 const bikeToGiveBack = ref<Bike | null>(null);
 
 const columns = [
-  { name: "ID", accessor: "id" },
-  { name: "Owner", accessor: "owner" },
+  { name: "ID", accessor: "bikeId" },
+  { name: "Owner", accessor: "ownerName" },
   {
-    name: "Stars",
-    accessor: (row: Bike) => row.history[0]?.comment?.stars.toString() ?? "N/A",
-  },
-  {
-    name: "State",
-    accessor: (row: Bike) => row.history[0]?.returnState?.state ?? "as new",
+    name: "Return State",
+    accessor: (row: Bike) => row.history[0]?.returnState ?? "as new",
   },
   {
     name: "Give Back",
@@ -36,14 +38,16 @@ const columns = [
   },
 ];
 
-function onSubmit(order: { bike: Bike; returnState: string; comment: string }) {
-  removeBike(order.bike, order.returnState, order.comment);
-  onClose();
-}
-
 function onClose() {
   bikeToGiveBack.value = null;
   showGiveBackModal.value = false;
+}
+
+function onSubmit(order: { bike: Bike; returnState: string; comment: string }) {
+  returnBike(order.bike, order.returnState, order.comment)
+    .then(() => fetch())
+    .catch((err) => pushToast("error", err));
+  onClose();
 }
 </script>
 

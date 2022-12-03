@@ -8,7 +8,7 @@ public record BikeDTO(
     UUID bikeId,
     String ownerName,
     List<OrderDTO> history,
-    boolean isAvailable,
+    String availability,
     int value
 ) {
 

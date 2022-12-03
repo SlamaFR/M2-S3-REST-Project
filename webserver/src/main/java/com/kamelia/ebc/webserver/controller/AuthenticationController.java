@@ -3,17 +3,17 @@ package com.kamelia.ebc.webserver.controller;
 import com.kamelia.ebc.webserver.dto.CredentialsDTO;
 import com.kamelia.ebc.webserver.dto.LoginDTO;
 import com.kamelia.ebc.webserver.service.UserService;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.rmi.RemoteException;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/api/auth")
@@ -40,8 +40,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestBody LoginDTO loginDTO) throws RemoteException {
-        userService.logout(loginDTO.sessionId());
+    public ResponseEntity<Void> logout(@RequestHeader(name = "Session-Token") UUID sessionToken) throws RemoteException {
+        userService.logout(sessionToken);
         return ResponseEntity.ok().build();
     }
 

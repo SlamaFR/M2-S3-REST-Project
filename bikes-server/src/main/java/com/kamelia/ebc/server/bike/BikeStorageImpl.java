@@ -2,7 +2,6 @@ package com.kamelia.ebc.server.bike;
 
 import com.kamelia.ebc.common.base.*;
 import com.kamelia.ebc.common.util.NotFoundException;
-import com.kamelia.ebc.common.util.Pair;
 import com.kamelia.ebc.common.util.UnauthorizedException;
 
 import java.rmi.RemoteException;
@@ -238,12 +237,31 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         return Response.unauthorized("User is not authenticated");
     }
 
-    private static Response<Set<Bike>> userBikes(
-        UUID userId,
-        HashMap<UUID, HashSet<Bike>> map
-    ) throws RemoteException {
-        var set = map.get(userId);
-        var cpy = set == null ? null : Set.copyOf(set);
-        return Response.ok(cpy);
+    @Override
+    public Response<List<String>> notifications(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+
+        var opt = userStorage.isAuthenticated(sessionToken);
+        if (opt.isEmpty()) {
+            return notAuthenticated();
+        }
+        var user = userStorage.findById(opt.get()).get();
+
+        return Response.ok(userIdToNotifications.get(user.id()));
     }
+
+    private Response<Set<Bike>> mapIdsToBikes(UUID userId, Map<UUID, Set<UUID>> map) {
+        var set = map.getOrDefault(userId, Set.of())
+            .stream()
+            .map(id -> (Bike) idToBike.get(id))
+            .collect(Collectors.toSet());
+        return Response.ok(set);
+    }
+
+    private static final Collector<BikeState, ArrayList<BikeState>, Response<List<BikeState>>> COLLECTOR = Collector.of(
+        ArrayList::new,
+        ArrayList::add,
+        (left, right) -> { left.addAll(right); return left; },
+        Response::ok
+    );
 }

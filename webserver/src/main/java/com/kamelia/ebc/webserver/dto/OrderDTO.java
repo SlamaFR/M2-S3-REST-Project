@@ -8,6 +8,6 @@ public record OrderDTO(
     Instant date,
     String ordererName,
     String comment,
-    ReturnState state
+    String returnState
 ) {
 }

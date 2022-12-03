@@ -4,11 +4,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 public record LoginDTO(
-    UUID sessionId
+    UUID sessionToken
 ) {
 
     public LoginDTO {
-        Objects.requireNonNull(sessionId);
+        Objects.requireNonNull(sessionToken);
     }
 
 }
