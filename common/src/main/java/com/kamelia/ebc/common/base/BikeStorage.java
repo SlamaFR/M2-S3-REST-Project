@@ -2,6 +2,7 @@ package com.kamelia.ebc.common.base;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,7 +18,9 @@ public interface BikeStorage extends Remote {
 
     Response<Set<Bike>> userOrderedBikes(UUID sessionToken) throws RemoteException;
 
-    Response<BikeState> orderBike(UUID bikeId, UUID sessionToken) throws RemoteException;
+    Response<List<BikeState>> orderBikes(List<UUID> bikeIds, UUID sessionToken) throws RemoteException;
+
+    Response<List<String>> notifications(UUID sessionToken) throws RemoteException;
 
     Response<Void> returnBike(BikeOrder order, UUID sessionToken) throws RemoteException;
 

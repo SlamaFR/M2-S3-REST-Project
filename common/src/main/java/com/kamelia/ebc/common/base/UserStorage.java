@@ -15,12 +15,8 @@ public interface UserStorage extends Remote {
 
     Response<UUID> login(String username, String password) throws RemoteException;
 
-    Response<List<String>> notifications(UUID sessionToken) throws RemoteException;
-
     void logout(UUID sessionToken) throws RemoteException;
 
     RemoteOptional<UUID> isAuthenticated(UUID sessionToken) throws RemoteException;
-
-    void addNotification(UUID userId, String notification) throws RemoteException;
 
 }

@@ -6,16 +6,13 @@ import com.kamelia.ebc.common.base.BikeState;
 import com.kamelia.ebc.common.base.BikeStorage;
 import com.kamelia.ebc.common.base.ReturnState;
 import com.kamelia.ebc.common.util.NotFoundException;
-import com.kamelia.ebc.webserver.dto.BikeDTO;
-import com.kamelia.ebc.webserver.util.Mappings;
-import org.springframework.stereotype.Service;
-
 import java.rmi.RemoteException;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BikeService {
@@ -28,10 +25,7 @@ public class BikeService {
 
     public Set<Bike> getAllBikes() throws RemoteException {
         return bikeStorage.allBikes()
-            .orElseThrow()
-            .stream()
-            .map(Mappings::bikeToDTO)
-            .collect(Collectors.toSet());
+            .orElseThrow();
     }
 
     public Bike getBike(UUID bikeId) throws RemoteException {
@@ -43,10 +37,10 @@ public class BikeService {
         return bikeStorage.userOrderedBikes(sessionId).orElseThrow();
     }
 
-    public BikeState orderBike(UUID sessionId, UUID bikeId) throws RemoteException {
+    public List<BikeState> orderBikes(UUID sessionId, List<UUID> bikeId) throws RemoteException {
         Objects.requireNonNull(sessionId);
         Objects.requireNonNull(bikeId);
-        return bikeStorage.orderBike(bikeId, sessionId).orElseThrow();
+        return bikeStorage.orderBikes(bikeId, sessionId).orElseThrow();
     }
 
     public void returnBike(UUID sessionId, UUID bikeId, String comment, ReturnState state) throws RemoteException {
@@ -63,6 +57,11 @@ public class BikeService {
             .orElseThrow();
     }
 
+    public List<String> notifications(UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(sessionToken);
+        return bikeStorage.notifications(sessionToken).orElseThrow();
+    }
+
     public Bike addBike(UUID sessionToken) throws RemoteException {
         Objects.requireNonNull(sessionToken);
         return bikeStorage.addOwnedBike(sessionToken).orElseThrow();
@@ -71,6 +70,6 @@ public class BikeService {
     public void removeBike(UUID sessionToken, UUID bikeId) throws RemoteException {
         Objects.requireNonNull(sessionToken);
         Objects.requireNonNull(bikeId);
-        bikeStorage.removeOwnedBike(bikeId, sessionToken).orElseThrow();
+        bikeStorage.removeOwnedBike(bikeId, sessionToken);
     }
 }

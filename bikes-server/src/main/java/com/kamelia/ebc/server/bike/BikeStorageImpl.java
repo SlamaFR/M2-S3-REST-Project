@@ -7,11 +7,16 @@ import com.kamelia.ebc.common.util.UnauthorizedException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage {
 
@@ -19,6 +24,7 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     private final HashMap<UUID, HashSet<Bike>> userIdToOwnedBikes;
     private final HashMap<UUID, HashSet<Bike>> userIdToOrderedBikes;
     private final HashMap<UUID, ArrayDeque<UUID>> bikeToOrderQueue;
+    private final HashMap<UUID, List<String>> userIdToNotifications;
     private final UserStorage userStorage;
 
     public BikeStorageImpl(UserStorage userStorage) throws RemoteException {
@@ -27,6 +33,7 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         this.userIdToOwnedBikes = new HashMap<>();
         this.userIdToOrderedBikes = new HashMap<>();
         this.bikeToOrderQueue = new HashMap<>();
+        this.userIdToNotifications = new HashMap<>();
         this.userStorage = userStorage;
     }
 
@@ -114,28 +121,42 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     }
 
     @Override
-    public Response<BikeState> orderBike(UUID bikeId, UUID sessionToken) throws RemoteException {
-        Objects.requireNonNull(bikeId);
+    public Response<List<BikeState>> orderBikes(List<UUID> bikeIds, UUID sessionToken) throws RemoteException {
+        Objects.requireNonNull(bikeIds);
         Objects.requireNonNull(sessionToken);
-
         var opt = userStorage.isAuthenticated(sessionToken);
         if (opt.isEmpty()) {
             return notAuthenticated();
         }
         var user = userStorage.findById(opt.get()).get();
 
+        return bikeIds.stream()
+            .map(id -> orderBikeUnchecked(user, id))
+            .filter(Objects::nonNull)
+            .collect(COLLECTOR);
+    }
+
+    private BikeState orderBikeUnchecked(User user, UUID bikeId) {
+        try {
+            return orderBike(user, bikeId);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private BikeState orderBike(User user, UUID bikeId) throws RemoteException {
         var bike = idToBike.get(bikeId);
         if (bike == null) {
-            return Response.notFound("Bike not found");
+            return null;
         }
 
         if (bike.removedFromOrders()) {
-            return Response.unauthorized("Owner has removed bike from orders");
+            return null;
         }
 
         if (bike.orderer().isEmpty()) {
             orderBikeForUser(bike, user);
-            return Response.ok(BikeState.AVAILABLE);
+            return BikeState.AVAILABLE;
         }
 
         // bike is already ordered, add user to queue
@@ -143,11 +164,15 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
             if (queue == null) {
                 queue = new ArrayDeque<>();
             }
-            queue.add(opt.get());
+            try {
+                queue.add(user.id());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             return queue;
         });
 
-        return Response.ok(BikeState.ALREADY_ORDERED);
+        return BikeState.ALREADY_ORDERED;
     }
 
     @Override
@@ -159,11 +184,9 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         if (opt.isEmpty()) {
             return notAuthenticated();
         }
+
         var user = userStorage.findById(opt.get()).get();
-
         var bike = order.bike();
-
-        // check if provided bike is the same as the stored bike
         var storedBike = idToBike.get(bike.id());
 
         if (!storedBike.orderer().contentEquals(user)) { // check if user is the orderer
@@ -174,7 +197,11 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
 
         // remove the bike from the orders of the user
         userIdToOrderedBikes.computeIfPresent(user.id(), (ignored, bikes) -> {
-            bikes.remove(storedBike);
+            try {
+                bikes.remove(storedBike.id());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             return bikes;
         });
         orderBikeForNextUserInQueue(storedBike);
@@ -189,7 +216,7 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         if (opt.isEmpty()) {
             return notAuthenticated();
         }
-        return userBikes(opt.get(), userIdToOwnedBikes);
+        return mapIdsToBikes(opt.get(), userIdToOwnedBikes);
     }
 
     @Override
@@ -199,11 +226,12 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         if (opt.isEmpty()) {
             return notAuthenticated();
         }
-        return userBikes(opt.get(), userIdToOrderedBikes);
+        return mapIdsToBikes(opt.get(), userIdToOrderedBikes);
     }
 
     private void orderBikeForNextUserInQueue(BikeImpl bike) throws RemoteException {
         var queue = bikeToOrderQueue.get(bike.id());
+        bike.setOrderer(null);
         if (queue == null) {
             return;
         }
@@ -213,13 +241,15 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
             return;
         }
 
-        var user = userStorage.findById(nextId);
-        if (user.isEmpty()) {
+        var opt = userStorage.findById(nextId);
+        if (opt.isEmpty()) {
             throw new IllegalStateException("User not found");
         }
 
-        orderBikeForUser(bike, user.get());
-        userStorage.addNotification(nextId, "Ouais mon reuf le vélo est pr");
+        var user = opt.get();
+        orderBikeForUser(bike, user);
+        userIdToNotifications.computeIfAbsent(user.id(), (ignored) -> new ArrayList<>())
+            .add("Ouais mon reuf le vélo " + bike.id() +" est prêt");
     }
 
     private void orderBikeForUser(BikeImpl bike, User orderer) throws RemoteException {
@@ -228,7 +258,11 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
             if (bikes == null) {
                 bikes = new HashSet<>();
             }
-            bikes.add(bike);
+            try {
+                bikes.add(bike.id());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
             return bikes;
         });
     }

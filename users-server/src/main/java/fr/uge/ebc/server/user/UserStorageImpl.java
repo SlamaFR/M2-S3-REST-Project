@@ -19,14 +19,12 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
     private final HashMap<String, UserImpl> nameToUser;
     private final HashMap<UUID, User> sessionToUser;
     private final HashMap<UUID, UUID> userIdToSession;
-    private final HashMap<UUID, List<String>> userIdToNotifications;
 
     public UserStorageImpl() throws RemoteException {
         this.idToUser = new HashMap<>();
         this.nameToUser = new HashMap<>();
         this.sessionToUser = new HashMap<>();
         this.userIdToSession = new HashMap<>();
-        this.userIdToNotifications = new HashMap<>();
     }
 
     @Override
@@ -72,7 +70,7 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
         try {
             userIdToSession.compute(user.id(), (ignored, session) -> {
                 if (session != null) {
-                    throw new IllegalStateException("User already logged in");
+                //    throw new IllegalStateException("User already logged in");
                 }
                 sessionToUser.put(sessionId, user);
                 return sessionId;
@@ -97,27 +95,7 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
         if (user == null) {
             return RemoteOptional.empty();
         }
-        return RemoteOptional.ofNullable(userIdToSession.get(user.id()));
-    }
-
-    @Override
-    public Response<List<String>> notifications(UUID sessionToken) throws RemoteException {
-        Objects.requireNonNull(sessionToken);
-        var user = sessionToUser.get(sessionToken);
-        if (user == null) {
-            return Response.unauthorized("Invalid session token");
-        }
-        return Response.ok(userIdToNotifications.get(sessionToken));
-    }
-
-    @Override
-    public void addNotification(UUID userId, String notification) throws RemoteException {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(notification);
-        if (!idToUser.containsKey(userId)) {
-            return;
-        }
-        userIdToNotifications.computeIfAbsent(userId, ignored -> new ArrayList<>()).add(notification);
+        return RemoteOptional.ofNullable(user.id());
     }
 
     private static String hashPassword(String password) {

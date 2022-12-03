@@ -1,14 +1,25 @@
 package com.kamelia.ebc.webserver.controller;
 
+import com.kamelia.ebc.common.base.BikeState;
+import com.kamelia.ebc.common.base.ReturnState;
 import com.kamelia.ebc.webserver.dto.BikeDTO;
+import com.kamelia.ebc.webserver.dto.OrderBikesDTO;
+import com.kamelia.ebc.webserver.dto.ReturnDTO;
 import com.kamelia.ebc.webserver.service.BikeService;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.rmi.RemoteException;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/api/bike")
