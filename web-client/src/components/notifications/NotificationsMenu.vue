@@ -15,7 +15,7 @@ defineProps<{
       </span>
       <ul class="w-full">
         <li
-          v-for="notification in notifications"
+          v-for="notification in notifications.slice().reverse()"
           :key="notification"
           class="text-info bg-base-200 w-full my-1 p-2 rounded"
         >
