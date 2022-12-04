@@ -50,11 +50,13 @@ const columns = [
         :checked="filterAvailable"
       />
     </span>
-    <data-table
-      :data="data"
-      :columns="columns"
-      clickable
-      @row-click="onRowClick"
-    />
+    <div class="max-h-[80vh] p-3 overflow-y-scroll">
+      <data-table
+        :data="data"
+        :columns="columns"
+        clickable
+        @row-click="onRowClick"
+      />
+    </div>
   </div>
 </template>
