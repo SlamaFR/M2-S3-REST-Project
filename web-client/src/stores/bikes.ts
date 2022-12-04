@@ -3,6 +3,7 @@ import { axiosInstance } from "@/utils/axiosConfig";
 import { useUserStore } from "@/stores/user";
 import type { Moment } from "moment";
 import moment from "moment";
+import type {AxiosResponse} from "axios";
 
 export interface Order {
   date: Moment;
@@ -116,6 +117,16 @@ export const useBikesStore = defineStore("bikes", () => {
     if (response.status !== 200) throw new Error("Could not get notifications");
     return response.data;
   }
+  async function buyBike(id: string) {
+    const userResponse  = await axiosInstance.get(`/auth/user/${user.value.username}`)
+    let response: AxiosResponse<string>
+    try {
+      response = await axiosInstance.post(`/buy/${id}`, userResponse.data);
+      if (response.status !== 200) throw new Error("Could not buy bike");
+    } catch (err: Error) {
+      throw new Error(response.data)
+    }
+  }
 
   return {
     getAllBikes,
@@ -126,5 +137,6 @@ export const useBikesStore = defineStore("bikes", () => {
     returnBike,
     addBikeToListings,
     getNotifications,
+    buyBike,
   };
 });

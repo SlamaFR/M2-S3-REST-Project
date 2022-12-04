@@ -77,7 +77,7 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
             try {
                 userIdToSession.compute(user.id(), (ignored, session) -> {
                     if (session != null) {
-                        //    throw new IllegalStateException("User already logged in");
+                        throw new IllegalStateException("User already logged in");
                     }
                     sessionToUser.put(sessionId, user);
                     return sessionId;

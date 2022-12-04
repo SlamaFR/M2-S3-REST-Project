@@ -1,5 +1,7 @@
 package com.kamelia.ebc.webserver.service;
 
+import com.kamelia.ebc.common.base.RemoteOptional;
+import com.kamelia.ebc.common.base.User;
 import com.kamelia.ebc.common.base.UserStorage;
 import com.kamelia.ebc.common.util.UnauthorizedException;
 import java.rmi.RemoteException;
@@ -34,4 +36,8 @@ public class UserService {
         userStorage.logout(sessionToken);
     }
 
+    public RemoteOptional<User> findByUsername(String username) throws RemoteException {
+        Objects.requireNonNull(username);
+        return userStorage.findByUsername(username);
+    }
 }

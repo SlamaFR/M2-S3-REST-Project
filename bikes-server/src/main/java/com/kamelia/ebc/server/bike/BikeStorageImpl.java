@@ -329,8 +329,8 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
                 return notAuthenticated();
             }
             var user = userStorage.findById(opt.get()).get();
-
-            return Response.ok(userIdToNotifications.get(user.id()));
+            var notifications = userIdToNotifications.get(user.id());
+            return Response.ok(notifications == null ? List.of() : notifications);
         }
     }
 

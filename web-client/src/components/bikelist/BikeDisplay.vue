@@ -8,6 +8,7 @@ import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useToast } from "@/stores/toasts";
 import { computedAsync } from "@vueuse/core";
+import {useRouter} from "vue-router";
 
 const props = defineProps<{
   bike: Bike;
@@ -46,16 +47,22 @@ const columns = [
   { name: "Comment", accessor: "comment" },
 ];
 
-const { isConnected } = storeToRefs(useUserStore());
+const { user, isConnected } = storeToRefs(useUserStore());
 const { addToCart, cartContains } = useCartStore();
-const { rentedContains } = useBikesStore();
+const { rentedContains, buyBike } = useBikesStore();
 
 const { pushToast } = useToast();
+const router = useRouter();
 
 const orderDisabled = computedAsync(async () => {
   if (!isConnected.value) return true;
   return cartContains(bike.bikeId) || await rentedContains(bike.bikeId);
 }, true);
+
+const buyDisabled = computed(() => {
+  if (!isConnected.value) return true;
+  return bike.history.length < 1 || bike.ownerName == user.username;
+})
 
 function onAddToCart() {
   addToCart(bike.bikeId)
@@ -66,6 +73,17 @@ function onAddToCart() {
     .catch(() => {
       pushToast("error", "Failed to add to cart");
     });
+}
+
+function onBuy(){
+  buyBike(bike.bikeId)
+      .then(() => {
+        pushToast("success", "Bike bought successfully")
+        router.push("/bikes")
+      })
+      .catch((err) => {
+        pushToast("error", `Failed to buy bike (${err})`)
+      })
 }
 </script>
 
@@ -113,6 +131,13 @@ function onAddToCart() {
           :disabled="orderDisabled"
         >
           Add to cart
+        </button>
+        <button
+            class="btn btn-primary"
+            @click="onBuy"
+            :class="{ hidden: buyDisabled }"
+        >
+          Buy it now (and become the owner)
         </button>
       </div>
     </div>

@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,4 +48,10 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/user/{username}")
+    public ResponseEntity<UserDTO> getUserByName(@PathVariable("username") String username) throws RemoteException {
+        var user = userService.findByUsername(username);
+        if (user.isEmpty()) return ResponseEntity.notFound().build();
+        else return ResponseEntity.ok(UserDTO.from(user.get()));
+    }
 }
