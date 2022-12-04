@@ -29,73 +29,85 @@ class UserStorageImpl extends UnicastRemoteObject implements UserStorage {
 
     @Override
     public RemoteOptional<User> findById(UUID id) throws RemoteException {
-        Objects.requireNonNull(id);
-        return RemoteOptional.ofNullable(idToUser.get(id));
+        synchronized (idToUser) {
+            Objects.requireNonNull(id);
+            return RemoteOptional.ofNullable(idToUser.get(id));
+        }
     }
 
     @Override
     public RemoteOptional<User> findByUsername(String username) throws RemoteException {
-        Objects.requireNonNull(username);
-        return RemoteOptional.ofNullable(nameToUser.get(username));
+        synchronized (idToUser) {
+            Objects.requireNonNull(username);
+            return RemoteOptional.ofNullable(nameToUser.get(username));
+        }
     }
 
     @Override
     public boolean save(String username, String password) throws RemoteException {
-        Objects.requireNonNull(username);
-        Objects.requireNonNull(password);
-        if (nameToUser.containsKey(username)) {
-            return false;
-        }
-        var hashedPassword = hashPassword(password);
-        var user = new UserImpl(UUID.randomUUID(), username, hashedPassword);
+        synchronized (idToUser) {
+            Objects.requireNonNull(username);
+            Objects.requireNonNull(password);
+            if (nameToUser.containsKey(username)) {
+                return false;
+            }
+            var hashedPassword = hashPassword(password);
+            var user = new UserImpl(UUID.randomUUID(), username, hashedPassword);
 
-        idToUser.put(user.id(), user);
-        nameToUser.put(user.username(), user);
-        return true;
+            idToUser.put(user.id(), user);
+            nameToUser.put(user.username(), user);
+            return true;
+        }
     }
 
     @Override
     public Response<UUID> login(String username, String password) throws RemoteException {
-        Objects.requireNonNull(username);
-        Objects.requireNonNull(password);
+        synchronized (idToUser) {
+            Objects.requireNonNull(username);
+            Objects.requireNonNull(password);
 
-        var hashedPassword = hashPassword(password);
-        var user = nameToUser.get(username);
+            var hashedPassword = hashPassword(password);
+            var user = nameToUser.get(username);
 
-        if (user == null || !user.hashedPassword().equals(hashedPassword)) {
-            return Response.badRequest("Invalid username or password");
+            if (user == null || !user.hashedPassword().equals(hashedPassword)) {
+                return Response.badRequest("Invalid username or password");
+            }
+
+            var sessionId = UUID.randomUUID();
+            try {
+                userIdToSession.compute(user.id(), (ignored, session) -> {
+                    if (session != null) {
+                        //    throw new IllegalStateException("User already logged in");
+                    }
+                    sessionToUser.put(sessionId, user);
+                    return sessionId;
+                });
+            } catch (IllegalStateException e) {
+                return Response.badRequest("Already logged in");
+            }
+
+            return Response.ok(sessionId);
         }
-
-        var sessionId = UUID.randomUUID();
-        try {
-            userIdToSession.compute(user.id(), (ignored, session) -> {
-                if (session != null) {
-                //    throw new IllegalStateException("User already logged in");
-                }
-                sessionToUser.put(sessionId, user);
-                return sessionId;
-            });
-        } catch (IllegalStateException e) {
-            return Response.badRequest("Already logged in");
-        }
-
-        return Response.ok(sessionId);
     }
 
     @Override
     public void logout(UUID sessionId) throws RemoteException {
-        Objects.requireNonNull(sessionId);
-        sessionToUser.remove(sessionId);
+        synchronized (idToUser) {
+            Objects.requireNonNull(sessionId);
+            sessionToUser.remove(sessionId);
+        }
     }
 
     @Override
     public RemoteOptional<UUID> isAuthenticated(UUID sessionId) throws RemoteException {
-        Objects.requireNonNull(sessionId);
-        var user = sessionToUser.get(sessionId);
-        if (user == null) {
-            return RemoteOptional.empty();
+        synchronized (idToUser) {
+            Objects.requireNonNull(sessionId);
+            var user = sessionToUser.get(sessionId);
+            if (user == null) {
+                return RemoteOptional.empty();
+            }
+            return RemoteOptional.ofNullable(user.id());
         }
-        return RemoteOptional.ofNullable(user.id());
     }
 
     private static String hashPassword(String password) {

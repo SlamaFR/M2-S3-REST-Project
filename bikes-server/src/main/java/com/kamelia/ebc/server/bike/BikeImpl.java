@@ -42,46 +42,62 @@ class BikeImpl extends UnicastRemoteObject implements Bike {
 
     @Override
     public boolean removedFromOrders() throws RemoteException {
-        return removedFromOrders;
+        synchronized (id) {
+            return removedFromOrders;
+        }
     }
 
     @Override
     public RemoteOptional<User> orderer() throws RemoteException {
-        return RemoteOptional.ofNullable(orderer);
+        synchronized (id) {
+            return RemoteOptional.ofNullable(orderer);
+        }
     }
 
     @Override
     public List<Pair<User, BikeOrder>> ordersHistory() throws RemoteException {
-        return List.copyOf(ordersHistory);
+        synchronized (id) {
+            return List.copyOf(ordersHistory);
+        }
     }
 
     void setOrderer(User orderer) {
-        this.orderer = orderer;
+        synchronized (id) {
+            this.orderer = orderer;
+        }
     }
 
     void addOrder(User user, BikeOrder order) {
-        Objects.requireNonNull(user);
-        Objects.requireNonNull(order);
-        ordersHistory.add(new Pair<>(user, order));
+        synchronized (id) {
+            Objects.requireNonNull(user);
+            Objects.requireNonNull(order);
+            ordersHistory.add(new Pair<>(user, order));
+        }
     }
 
     void setRemovedFromOrders() {
-        removedFromOrders = true;
+        synchronized (id) {
+            removedFromOrders = true;
+        }
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BikeImpl b)) return false;
+        synchronized (id) {
+            if (this == o) return true;
+            if (!(o instanceof BikeImpl b)) return false;
 
-        return id.equals(b.id)
-            && owner.equals(b.owner)
-            && ordersHistory.equals(b.ordersHistory)
-            && Objects.equals(orderer, b.orderer);
+            return id.equals(b.id)
+                && owner.equals(b.owner)
+                && ordersHistory.equals(b.ordersHistory)
+                && Objects.equals(orderer, b.orderer);
+        }
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, owner, ordersHistory, orderer);
+        synchronized (id) {
+            return Objects.hash(id, owner, ordersHistory, orderer);
+        }
     }
 }

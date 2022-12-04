@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import type { Bike } from "@/stores/bikes";
+import { useBikesStore } from "@/stores/bikes";
 import { computed, reactive } from "vue";
 import DataTable from "@/components/scaffold/table/DataTable.vue";
 import { useCartStore } from "@/stores/cart";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useToast } from "@/stores/toasts";
-import type { Moment } from "moment";
-import { useBikesStore } from "@/stores/bikes";
 import { computedAsync } from "@vueuse/core";
 
 const props = defineProps<{
@@ -55,8 +54,7 @@ const { pushToast } = useToast();
 
 const orderDisabled = computedAsync(async () => {
   if (!isConnected.value) return true;
-  if (await rentedContains(bike.bikeId)) return true;
-  return cartContains(bike.bikeId);
+  return cartContains(bike.bikeId) || await rentedContains(bike.bikeId);
 }, true);
 
 function onAddToCart() {
