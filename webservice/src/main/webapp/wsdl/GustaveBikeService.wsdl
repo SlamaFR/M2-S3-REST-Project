@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://service.webservice.kamelia.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://service.webservice.kamelia.com" xmlns:intf="http://service.webservice.kamelia.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://service.webservice.kamelia.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://service.webservice.kamelia.com" xmlns:intf="http://service.webservice.kamelia.com" xmlns:tns1="http://dto.webservice.kamelia.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--WSDL created by Apache Axis version: 1.4
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://service.webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://dto.webservice.kamelia.com"/>
    <element name="buyBike">
     <complexType>
      <sequence>
@@ -15,10 +16,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <element name="buyBikeResponse">
     <complexType>
      <sequence>
-      <element name="buyBikeReturn" type="xsd:string"/>
+      <element name="buyBikeReturn" type="tns1:PurchaseResponse"/>
      </sequence>
     </complexType>
    </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://dto.webservice.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="PurchaseResponse">
+    <sequence>
+     <element name="message" nillable="true" type="xsd:string"/>
+     <element name="status" type="xsd:int"/>
+    </sequence>
+   </complexType>
   </schema>
  </wsdl:types>
 

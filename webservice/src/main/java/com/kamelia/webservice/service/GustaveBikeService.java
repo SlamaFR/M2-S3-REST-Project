@@ -9,6 +9,7 @@ import com.kamelia.ebc.common.base.BikeStorage;
 import com.kamelia.ebc.common.base.RemoteOptional;
 import com.kamelia.ebc.common.base.User;
 import com.kamelia.ebc.common.util.Pair;
+import com.kamelia.webservice.dto.PurchaseResponse;
 
 import javax.xml.rpc.ServiceException;
 import java.rmi.Naming;
@@ -34,31 +35,50 @@ public class GustaveBikeService {
 		}
 	}
 
-	public String buyBike(String userId, String bikeId) throws RemoteException {
+	public PurchaseResponse buyBike(String userId, String bikeId) throws RemoteException {
+		System.out.println("User " + userId + "- bike " + bikeId);
+		System.out.println("a");
 		UUID bikeUUID = UUID.fromString(bikeId);
+		System.out.println("b");
 		RemoteOptional<Bike> optionalBike = BIKE_STORAGE.findById(bikeUUID);
+		System.out.println("c  " + optionalBike);
 
 		if (optionalBike.isEmpty()) {
-			return "This bike does not exist";
+			System.out.println("c end");
+			return new PurchaseResponse("This bike does not exist", 404);
 		}
 
+		System.out.println("d");
 		Bike bike = optionalBike.get();
+		System.out.println("e " + bike);
 		List<Pair<User, BikeOrder>> history = bike.ordersHistory();
+		System.out.println("f " + history);
 		if (history.isEmpty()) {
-			return "This bike is not available";
+			System.out.println("f end");
+			return new PurchaseResponse("This bike is not for sale", 403);
 		}
 
+		System.out.println("g");
 		Pair<User, BikeOrder> lastOrder = history.get(history.size() - 1);
+		System.out.println("h " + lastOrder);
 		int price = lastOrder.second().state().value();
+		System.out.println("i " + price);
 
 		Response bankResponse = BANK_SERVICE.checkBalance(userId, price);
+		System.out.println("j " + bankResponse);
 		if (!bankResponse.getState().equals("OK")) {
-			return "You don't have enough money";
+			System.out.println("j end");
+			return new PurchaseResponse("You don't have enough money", 403);
 		}
 
-		BANK_SERVICE.debit(userId, price);
-		BIKE_STORAGE.changeBikeOwner(bikeUUID, UUID.fromString(userId));
+		System.out.println("k");
 
-		return "Bike bought";
+		BANK_SERVICE.debit(userId, price);
+		System.out.println("l");
+		BANK_SERVICE.credit(bike.owner().id().toString(), price);
+		System.out.println("m");
+		BIKE_STORAGE.changeBikeOwner(bikeUUID, UUID.fromString(userId));
+		System.out.println("n");
+		return new PurchaseResponse("Purchase successful", 200);
 	}
 }

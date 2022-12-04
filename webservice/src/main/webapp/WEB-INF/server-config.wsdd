@@ -23,18 +23,19 @@
  <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
  <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
  <ns1:service name="GustaveBikeService" provider="java:RPC" style="wrapped" use="literal">
-  <ns2:operation name="buyBike" qname="ns1:buyBike" returnQName="ns1:buyBikeReturn" returnType="xsd:string" soapAction="" xmlns:ns1="http://service.webservice.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/">
-   <ns2:parameter qname="ns1:userId" type="xsd:string"/>
-   <ns2:parameter qname="ns1:bikeId" type="xsd:string"/>
-  </ns2:operation>
+  <ns3:operation name="buyBike" qname="ns1:buyBike" returnQName="ns1:buyBikeReturn" returnType="ns2:PurchaseResponse" soapAction="" xmlns:ns1="http://service.webservice.kamelia.com" xmlns:ns2="http://dto.webservice.kamelia.com" xmlns:ns3="http://xml.apache.org/axis/wsdd/">
+   <ns3:parameter qname="ns1:userId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:bikeId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns3:operation>
   <ns1:parameter name="allowedMethods" value="buyBike"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
   <ns1:parameter name="wsdlPortType" value="GustaveBikeService"/>
   <ns1:parameter name="className" value="com.kamelia.webservice.service.GustaveBikeService"/>
   <ns1:parameter name="wsdlServicePort" value="GustaveBikeService"/>
-  <ns1:parameter name="schemaQualified" value="http://service.webservice.kamelia.com"/>
+  <ns1:parameter name="schemaQualified" value="http://dto.webservice.kamelia.com,http://service.webservice.kamelia.com"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://service.webservice.kamelia.com"/>
   <ns1:parameter name="wsdlServiceElement" value="GustaveBikeServiceService"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:PurchaseResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.PurchaseResponse" xmlns:ns3="http://dto.webservice.kamelia.com"/>
  </ns1:service>
  <ns1:service name="AdminService" provider="java:MSG">
   <ns1:parameter name="allowedMethods" value="AdminService"/>

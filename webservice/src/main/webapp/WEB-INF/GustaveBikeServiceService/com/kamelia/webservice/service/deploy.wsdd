@@ -5,16 +5,17 @@
   <service name="GustaveBikeService" provider="java:RPC" style="wrapped" use="literal">
       <parameter name="wsdlTargetNamespace" value="http://service.webservice.kamelia.com"/>
       <parameter name="wsdlServiceElement" value="GustaveBikeServiceService"/>
-      <parameter name="schemaQualified" value="http://service.webservice.kamelia.com"/>
+      <parameter name="schemaQualified" value="http://dto.webservice.kamelia.com,http://service.webservice.kamelia.com"/>
       <parameter name="wsdlServicePort" value="GustaveBikeService"/>
       <parameter name="className" value="com.kamelia.webservice.service.GustaveBikeService"/>
       <parameter name="wsdlPortType" value="GustaveBikeService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
-      <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="buyBike" qname="operNS:buyBike" returnQName="retNS:buyBikeReturn" returnType="rtns:string" soapAction="">
+      <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://dto.webservice.kamelia.com" name="buyBike" qname="operNS:buyBike" returnQName="retNS:buyBikeReturn" returnType="rtns:PurchaseResponse" soapAction="">
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:userId" type="tns:string"/>
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bikeId" type="tns:string"/>
       </operation>
       <parameter name="allowedMethods" value="buyBike"/>
 
+      <typeMapping xmlns:ns="http://dto.webservice.kamelia.com" qname="ns:PurchaseResponse" type="java:com.kamelia.webservice.dto.PurchaseResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
   </service>
 </deployment>

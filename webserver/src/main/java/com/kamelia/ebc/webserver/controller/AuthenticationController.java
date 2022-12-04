@@ -2,6 +2,7 @@ package com.kamelia.ebc.webserver.controller;
 
 import com.kamelia.ebc.webserver.dto.CredentialsDTO;
 import com.kamelia.ebc.webserver.dto.LoginDTO;
+import com.kamelia.ebc.webserver.dto.UserDTO;
 import com.kamelia.ebc.webserver.service.UserService;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,7 @@
 package com.kamelia.ebc.webserver.config;
 
-import com.kamelia.webservice.service.Hello;
-import com.kamelia.webservice.service.HelloServiceLocator;
+import com.kamelia.webservice.service.GustaveBikeService;
+import com.kamelia.webservice.service.GustaveBikeServiceServiceLocator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,8 +11,8 @@ import javax.xml.rpc.ServiceException;
 public class SOAPConfiguration {
 
     @Bean
-    public Hello hello() throws ServiceException {
-        return new HelloServiceLocator().getHello();
+    public GustaveBikeService gustaveBikeService() throws ServiceException {
+        return new GustaveBikeServiceServiceLocator().getGustaveBikeService();
     }
 
 }
