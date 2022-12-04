@@ -85,6 +85,7 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
             var id = UUID.randomUUID();
             var bike = new BikeImpl(id, user);
             idToBike.put(bike.id(), bike);
+            userIdToOwnedBikes.computeIfAbsent(user.id(), ignored -> new HashSet<>()).add(bike.id());
             return Response.ok(bike);
         }
     }
@@ -254,19 +255,21 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
     }
 
     @Override
-    public Response<Void> changeBikeOwner(UUID bikeId, UUID sessionToken) throws RemoteException {
+    public Response<Void> changeBikeOwner(UUID bikeId, UUID userId) throws RemoteException {
         Objects.requireNonNull(bikeId);
-        Objects.requireNonNull(sessionToken);
-        var opt = userStorage.isAuthenticated(sessionToken);
-        if (opt.isEmpty()) {
-            return notAuthenticated();
-        }
+        Objects.requireNonNull(userId);
 
-        var user = userStorage.findById(opt.get()).get();
+        var optUser = userStorage.findById(userId);
+        if (optUser.isEmpty()) {
+            return Response.notFound("User not found");
+        }
+        var user = optUser.get();
+
         var bike = idToBike.get(bikeId);
         if (bike == null) {
             return Response.notFound("Bike not found");
         }
+
         userIdToOwnedBikes.get(bike.owner().id()).remove(bike.id());
         bike.setOwner(user);
         userIdToOwnedBikes.computeIfAbsent(user.id(), ignored -> new HashSet<>()).add(bike.id());
