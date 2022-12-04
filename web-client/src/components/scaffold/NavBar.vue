@@ -2,8 +2,10 @@
 import CartButton from "@/components/cart/CartButton.vue";
 import CartMenu from "@/components/cart/CartMenu.vue";
 import ProfileButton from "@/components/profile/ProfileButton.vue";
+import { PlusIcon } from "vue-tabler-icons";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
+import { useBikesStore } from "@/stores/bikes";
 
 const destinations = [
   { name: "Home", path: "/" },
@@ -12,13 +14,14 @@ const destinations = [
 ];
 
 const { user, isConnected } = storeToRefs(useUserStore());
+const { addBikeToListings } = useBikesStore();
 </script>
 
 <template>
   <div class="navbar z-50 bg-base-100">
     <div class="flex-1">
       <router-link to="/" class="btn btn-ghost normal-case text-xl">
-        Eiffel Bikes
+        Eiffel Bikes (Demo version)
       </router-link>
     </div>
     <div class="flex-none gap-5">
@@ -38,6 +41,9 @@ const { user, isConnected } = storeToRefs(useUserStore());
       <div v-if="isConnected" class="dropdown dropdown-end">
         <cart-button size="8" />
         <cart-menu />
+      </div>
+      <div v-if="isConnected" class="dropdown dropdown-end tooltip tooltip-bottom" data-tip="Add Bike to Listings">
+        <button class="btn btn-circle btn-ghost" @click="addBikeToListings"><plus-icon /></button>
       </div>
       <div v-if="isConnected" class="dropdown dropdown-end">
         <span>

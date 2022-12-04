@@ -95,6 +95,18 @@ export const useBikesStore = defineStore("bikes", () => {
     );
     if (response.status !== 200) throw new Error("Could not return bike");
   }
+  async function addBikeToListings() {
+    const response = await axiosInstance.post(
+      `/bike/add`,
+      {},
+      {
+        headers: {
+          "Session-Token": user.value.token,
+        },
+      }
+    );
+    if (response.status !== 200) throw new Error("Could not add bike");
+  }
 
   return {
     getAllBikes,
@@ -103,5 +115,6 @@ export const useBikesStore = defineStore("bikes", () => {
     rentedContains,
     orderBikes,
     returnBike,
+    addBikeToListings,
   };
 });
