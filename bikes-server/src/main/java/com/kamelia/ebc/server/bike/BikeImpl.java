@@ -16,7 +16,7 @@ import java.util.UUID;
 class BikeImpl extends UnicastRemoteObject implements Bike {
 
     private final UUID id;
-    private final User owner;
+    private User owner;
     private final ArrayList<Pair<User, BikeOrder>> ordersHistory;
     private User orderer;
     private boolean removedFromOrders;
@@ -58,6 +58,13 @@ class BikeImpl extends UnicastRemoteObject implements Bike {
     public List<Pair<User, BikeOrder>> ordersHistory() throws RemoteException {
         synchronized (id) {
             return List.copyOf(ordersHistory);
+        }
+    }
+
+    void setOwner(User owner) {
+        Objects.requireNonNull(owner);
+        synchronized (id) {
+            this.owner = owner;
         }
     }
 
