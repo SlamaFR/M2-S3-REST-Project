@@ -22,7 +22,7 @@ watch(selected, () => {
       <select v-model="selected" class="select select-bordered">
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
-        <option value="YEN">YEN</option>
+        <option value="JPY">JPY</option>
       </select>
     </div>
   </div>
