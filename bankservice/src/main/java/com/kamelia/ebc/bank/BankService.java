@@ -73,13 +73,15 @@ public class BankService {
      */
     public Response credit(String bankAccount, String currency, double amount) throws RemoteException {
         var uuid = UUID.fromString(bankAccount);
-        var newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Integer, Integer>() {
+
+        var value = convert(amount, currency, DEFAULT_CURRENCY);
+        var newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Double, Double>() {
             @Override
-            public Integer apply(UUID k, Integer v) {
-                return (v == null ? DEFAULT_BALANCE : v) + amount;
+            public Double apply(UUID k, Double v) {
+                return (v == null ? DEFAULT_BALANCE : v) + value;
             }
         });
-        return new Response("OK", newBalance);
+        return new Response("OK", convert(newBalance, DEFAULT_CURRENCY, currency));
     }
 
     /**
@@ -91,10 +93,11 @@ public class BankService {
         if (!"OK".equals(check.getState())) {
             return new Response("INSUFFICIENT_BALANCE", check.getBalance());
         }
-        var newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Integer, Integer>() {
+        var value = convert(amount, currency, DEFAULT_CURRENCY);
+        var newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Double, Double>() {
             @Override
-            public Integer apply(UUID k, Integer v) {
-                return (v == null ? 0 : v) - amount;
+            public Double apply(UUID k, Double v) {
+                return (v == null ? .0 : v) - value;
             }
         });
         return new Response("OK", convert(newBalance, DEFAULT_CURRENCY, currency));
