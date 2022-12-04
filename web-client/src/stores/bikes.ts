@@ -121,7 +121,10 @@ export const useBikesStore = defineStore("bikes", () => {
     const userResponse  = await axiosInstance.get(`/auth/user/${user.value.username}`)
     let response: AxiosResponse<string>
     try {
-      response = await axiosInstance.post(`/buy/${id}`, userResponse.data);
+      response = await axiosInstance.post(`/buy/${id}`, {
+        userId: userResponse.data.id,
+        currency: user.value.currency,
+      });
       if (response.status !== 200) throw new Error("Could not buy bike");
     } catch (err: Error) {
       throw new Error(response.data)

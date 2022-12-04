@@ -1,5 +1,6 @@
 package com.kamelia.ebc.webserver.service;
 
+import com.kamelia.ebc.bank.BankService;
 import com.kamelia.ebc.common.util.Pair;
 import com.kamelia.webservice.service.GustaveBikeService;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class ShoppingService {
         this.bankService = bankService;
     }
 
-    public Pair<String, Integer> buyBike(UUID userId, UUID bikeId) throws RemoteException {
-        var purchaseResponse = gustaveBikeService.buyBike(userId.toString(), bikeId.toString());
+    public Pair<String, Integer> buyBike(UUID userId, String currency, UUID bikeId) throws RemoteException {
+        var purchaseResponse = gustaveBikeService.buyBike(userId.toString(), bikeId.toString(), currency);
         return new Pair<>(purchaseResponse.getMessage(), purchaseResponse.getStatus());
     }
 

@@ -43,6 +43,7 @@ export const useUserStore = defineStore("user", () => {
     setUser({
       username,
       token: response.data.sessionToken,
+      currency: "USD"
     });
     return true;
   }
@@ -72,6 +73,24 @@ export const useUserStore = defineStore("user", () => {
     );
     if (response.status !== 200) throw new Error("Logout failed");
     cookies.remove("user", { sameSite: "strict", secure: true });
+    setUser(null)
+  }
+  async function getBalance(): Promise<number> {
+    const userResponse  = await axiosInstance.get(`/auth/user/${user.value.username}`);
+    const response = await axiosInstance.get(`/balance/${userResponse.data.id}?currency=${user.value.currency}`, {
+      headers: {
+        "Session-Token": user.value.token
+      }
+    });
+    if (response.status !== 200) throw new Error("Couldn't get balance");
+    return response.data
+  }
+  function setCurrency(currency: string) {
+    setUser({
+      username: user.value.username,
+      token: user.value.token,
+      currency
+    })
   }
 
   return {
@@ -80,5 +99,7 @@ export const useUserStore = defineStore("user", () => {
     login,
     register,
     logout,
+    getBalance,
+    setCurrency
   };
 });

@@ -1,6 +1,7 @@
 package com.kamelia.ebc.webserver.controller;
 
 import com.kamelia.ebc.common.util.Pair;
+import com.kamelia.ebc.webserver.dto.PurchaseDTO;
 import com.kamelia.ebc.webserver.dto.UserDTO;
 import com.kamelia.ebc.webserver.service.ShoppingService;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,10 @@ public class ShoppingController {
 
     @PostMapping("/buy/{bikeId}")
     public ResponseEntity<String> buyBike(
-        @RequestBody UserDTO user,
+        @RequestBody PurchaseDTO dto,
         @PathVariable("bikeId") UUID bikeId
     ) throws RemoteException {
-        var pair = shoppingService.buyBike(user.id(), bikeId);
+        var pair = shoppingService.buyBike(dto.userId(), dto.currency(), bikeId);
         return ResponseEntity.status(pair.second()).body(pair.first());
     }
 

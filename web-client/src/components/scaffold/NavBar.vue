@@ -2,13 +2,16 @@
 import CartButton from "@/components/cart/CartButton.vue";
 import CartMenu from "@/components/cart/CartMenu.vue";
 import ProfileButton from "@/components/profile/ProfileButton.vue";
-import { PlusIcon } from "vue-tabler-icons";
+import { PlusIcon, CurrencyDollarIcon, CurrencyEuroIcon, CurrencyYenIcon } from "vue-tabler-icons";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useBikesStore } from "@/stores/bikes";
 import NotificationsButton from "@/components/notifications/NotificationsButton.vue";
 import { computedAsync } from "@vueuse/core";
 import NotificationsMenu from "@/components/notifications/NotificationsMenu.vue";
+import {computed} from "vue";
+import CurrencyButton from "@/components/currency/CurrencyButton.vue";
+import CurrencyMenu from "@/components/currency/CurrencyMenu.vue";
 
 const destinations = [
   { name: "Home", path: "/" },
@@ -20,6 +23,14 @@ const { user, isConnected } = storeToRefs(useUserStore());
 const { addBikeToListings, getNotifications } = useBikesStore();
 
 const notifications = computedAsync<string[]>(async () => await getNotifications(), []);
+
+const currencyIcon = computed(() => {
+  if (!isConnected || user.value.currency === "USD") return CurrencyDollarIcon;
+  else if (user.value.currency === "EUR") return CurrencyEuroIcon;
+  else if (user.value.currency === "YEN") return CurrencyYenIcon;
+  else return CurrencyDollarIcon;
+})
+
 </script>
 
 <template>
@@ -53,6 +64,10 @@ const notifications = computedAsync<string[]>(async () => await getNotifications
       <div v-if="isConnected" class="dropdown dropdown-end">
         <notifications-button :count="notifications.length"/>
         <notifications-menu :notifications="notifications"/>
+      </div>
+      <div v-if="isConnected" class="dropdown dropdown-end">
+        <currency-button :icon="currencyIcon"/>
+        <currency-menu />
       </div>
       <div v-if="isConnected" class="dropdown dropdown-end">
         <span>
