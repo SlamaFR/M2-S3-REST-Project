@@ -28,7 +28,6 @@ public class ShoppingController {
         @RequestBody UserDTO user,
         @PathVariable("bikeId") UUID bikeId
     ) throws RemoteException {
-        System.out.println("oe");
         var pair = shoppingService.buyBike(user.id(), bikeId);
         return ResponseEntity.status(pair.second()).body(pair.first());
     }

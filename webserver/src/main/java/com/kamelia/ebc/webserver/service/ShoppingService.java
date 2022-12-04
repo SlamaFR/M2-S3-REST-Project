@@ -17,7 +17,6 @@ public class ShoppingService {
     }
 
     public Pair<String, Integer> buyBike(UUID userId, UUID bikeId) throws RemoteException {
-        System.out.println("User " + userId + " is buying bike " + bikeId);
         var purchaseResponse = gustaveBikeService.buyBike(userId.toString(), bikeId.toString());
         return new Pair<>(purchaseResponse.getMessage(), purchaseResponse.getStatus());
     }
