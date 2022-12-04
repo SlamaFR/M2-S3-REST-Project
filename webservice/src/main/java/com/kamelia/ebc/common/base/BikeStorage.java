@@ -28,4 +28,6 @@ public interface BikeStorage extends Remote {
 
     Response<Void> removeOwnedBike(UUID bikeId, UUID sessionToken) throws RemoteException;
 
+    Response<Void> changeBikeOwner(UUID bikeId, UUID sessionToken) throws RemoteException;
+
 }

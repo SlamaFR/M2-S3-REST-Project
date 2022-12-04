@@ -10,11 +10,11 @@
       <parameter name="className" value="com.kamelia.webservice.service.GustaveBikeService"/>
       <parameter name="wsdlPortType" value="GustaveBikeService"/>
       <parameter name="typeMappingVersion" value="1.2"/>
-      <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="f" qname="operNS:f" returnQName="retNS:fReturn" returnType="rtns:string" soapAction="">
-      </operation>
       <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="buyBike" qname="operNS:buyBike" returnQName="retNS:buyBikeReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:userId" type="tns:string"/>
+        <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bikeId" type="tns:string"/>
       </operation>
-      <parameter name="allowedMethods" value="buyBike f"/>
+      <parameter name="allowedMethods" value="buyBike"/>
 
   </service>
 </deployment>

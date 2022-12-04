@@ -10,6 +10,8 @@ import java.util.function.Function;
 
 public class BankService {
 
+    public static final int DEFAULT_BALANCE = 1000;
+
     /**
      * This map stores bank accounts. A given UUID represents an account, and maps to a balance in EUR (Euros).
      */
@@ -23,7 +25,7 @@ public class BankService {
         int accountBalance = Objects.requireNonNull(BANK_ACCOUNTS.computeIfAbsent(uuid, new Function<UUID, Integer>() {
             @Override
             public Integer apply(UUID k) {
-                return 0;
+                return DEFAULT_BALANCE;
             }
         }));
         if (accountBalance < amount) {
@@ -41,7 +43,7 @@ public class BankService {
         var newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Integer, Integer>() {
             @Override
             public Integer apply(UUID k, Integer v) {
-                return (v == null ? 0 : v) + amount;
+                return (v == null ? DEFAULT_BALANCE : v) + amount;
             }
         });
         return new Response("OK", newBalance);
