@@ -107,6 +107,15 @@ export const useBikesStore = defineStore("bikes", () => {
     );
     if (response.status !== 200) throw new Error("Could not add bike");
   }
+  async function getNotifications(): Promise<string[]> {
+    const response = await axiosInstance.get("/bike/notifications", {
+      headers: {
+        "Session-Token": user.value.token,
+      }
+    });
+    if (response.status !== 200) throw new Error("Could not get notifications");
+    return response.data;
+  }
 
   return {
     getAllBikes,
@@ -116,5 +125,6 @@ export const useBikesStore = defineStore("bikes", () => {
     orderBikes,
     returnBike,
     addBikeToListings,
+    getNotifications,
   };
 });

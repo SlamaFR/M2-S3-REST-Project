@@ -6,6 +6,9 @@ import { PlusIcon } from "vue-tabler-icons";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { useBikesStore } from "@/stores/bikes";
+import NotificationsButton from "@/components/notifications/NotificationsButton.vue";
+import { computedAsync } from "@vueuse/core";
+import NotificationsMenu from "@/components/notifications/NotificationsMenu.vue";
 
 const destinations = [
   { name: "Home", path: "/" },
@@ -14,7 +17,9 @@ const destinations = [
 ];
 
 const { user, isConnected } = storeToRefs(useUserStore());
-const { addBikeToListings } = useBikesStore();
+const { addBikeToListings, getNotifications } = useBikesStore();
+
+const notifications = computedAsync<string[]>(async () => await getNotifications(), []);
 </script>
 
 <template>
@@ -39,11 +44,15 @@ const { addBikeToListings } = useBikesStore();
         </router-link>
       </div>
       <div v-if="isConnected" class="dropdown dropdown-end">
-        <cart-button size="8" />
+        <cart-button/>
         <cart-menu />
       </div>
       <div v-if="isConnected" class="dropdown dropdown-end tooltip tooltip-bottom" data-tip="Add Bike to Listings">
         <button class="btn btn-circle btn-ghost" @click="addBikeToListings"><plus-icon /></button>
+      </div>
+      <div v-if="isConnected" class="dropdown dropdown-end">
+        <notifications-button :count="notifications.length"/>
+        <notifications-menu :notifications="notifications"/>
       </div>
       <div v-if="isConnected" class="dropdown dropdown-end">
         <span>

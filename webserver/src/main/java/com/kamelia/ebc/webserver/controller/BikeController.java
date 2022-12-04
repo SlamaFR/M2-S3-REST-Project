@@ -91,7 +91,7 @@ public class BikeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/notifications")
     public ResponseEntity<List<String>> notifications(
         @RequestHeader(name = "Session-Token") UUID sessionToken
     ) throws RemoteException{
