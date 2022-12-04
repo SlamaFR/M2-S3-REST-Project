@@ -7,5 +7,6 @@ include(
     ":bankservice_client",
     ":webservice",
     ":webserver",
-    ":webservice_client"
+    ":webservice_client",
+    ":currency_converter"
 )

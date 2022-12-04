@@ -7,6 +7,7 @@ import { axiosInstance } from "@/utils/axiosConfig";
 export interface User {
   username: string;
   token: string;
+  currency: string;
 }
 
 function distinct(bikes: Bike[]): Bike[] {

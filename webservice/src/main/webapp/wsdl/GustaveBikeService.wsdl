@@ -10,6 +10,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      <sequence>
       <element name="userId" type="xsd:string"/>
       <element name="bikeId" type="xsd:string"/>
+      <element name="currency" type="xsd:string"/>
      </sequence>
     </complexType>
    </element>

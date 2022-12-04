@@ -1,59 +1,64 @@
 /**
- * GustaveBikeServiceServiceLocator.java
+ * FxtopServicesLocator.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package com.kamelia.webservice.service;
+package FxtopAPI;
 
-public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Service implements com.kamelia.webservice.service.GustaveBikeServiceService {
+public class FxtopServicesLocator extends org.apache.axis.client.Service implements FxtopAPI.FxtopServices {
 
-    public GustaveBikeServiceServiceLocator() {
+/**
+ * This document describes the Fxtop services, for more information,
+ * please contact us at webmaster@fxtop.com see more on https://fxtop.com/en/developpers.php#ws
+ */
+
+    public FxtopServicesLocator() {
     }
 
 
-    public GustaveBikeServiceServiceLocator(org.apache.axis.EngineConfiguration config) {
+    public FxtopServicesLocator(org.apache.axis.EngineConfiguration config) {
         super(config);
     }
 
-    public GustaveBikeServiceServiceLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
+    public FxtopServicesLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
-    // Use to get a proxy class for GustaveBikeService
-    private java.lang.String GustaveBikeService_address = "http://localhost:8080/WebServiceTest/services/GustaveBikeService";
+    // Use to get a proxy class for FxtopServicesPort
+    private java.lang.String FxtopServicesPort_address = "https://fxtop.com/dev/FxtopServices.php";
 
-    public java.lang.String getGustaveBikeServiceAddress() {
-        return GustaveBikeService_address;
+    public java.lang.String getFxtopServicesPortAddress() {
+        return FxtopServicesPort_address;
     }
 
     // The WSDD service name defaults to the port name.
-    private java.lang.String GustaveBikeServiceWSDDServiceName = "GustaveBikeService";
+    private java.lang.String FxtopServicesPortWSDDServiceName = "FxtopServicesPort";
 
-    public java.lang.String getGustaveBikeServiceWSDDServiceName() {
-        return GustaveBikeServiceWSDDServiceName;
+    public java.lang.String getFxtopServicesPortWSDDServiceName() {
+        return FxtopServicesPortWSDDServiceName;
     }
 
-    public void setGustaveBikeServiceWSDDServiceName(java.lang.String name) {
-        GustaveBikeServiceWSDDServiceName = name;
+    public void setFxtopServicesPortWSDDServiceName(java.lang.String name) {
+        FxtopServicesPortWSDDServiceName = name;
     }
 
-    public com.kamelia.webservice.service.GustaveBikeService getGustaveBikeService() throws javax.xml.rpc.ServiceException {
+    public FxtopAPI.FxtopServicesPortType getFxtopServicesPort() throws javax.xml.rpc.ServiceException {
        java.net.URL endpoint;
         try {
-            endpoint = new java.net.URL(GustaveBikeService_address);
+            endpoint = new java.net.URL(FxtopServicesPort_address);
         }
         catch (java.net.MalformedURLException e) {
             throw new javax.xml.rpc.ServiceException(e);
         }
-        return getGustaveBikeService(endpoint);
+        return getFxtopServicesPort(endpoint);
     }
 
-    public com.kamelia.webservice.service.GustaveBikeService getGustaveBikeService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
+    public FxtopAPI.FxtopServicesPortType getFxtopServicesPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            com.kamelia.webservice.service.GustaveBikeServiceSoapBindingStub _stub = new com.kamelia.webservice.service.GustaveBikeServiceSoapBindingStub(portAddress, this);
-            _stub.setPortName(getGustaveBikeServiceWSDDServiceName());
+            FxtopAPI.FxtopServicesBindingStub _stub = new FxtopAPI.FxtopServicesBindingStub(portAddress, this);
+            _stub.setPortName(getFxtopServicesPortWSDDServiceName());
             return _stub;
         }
         catch (org.apache.axis.AxisFault e) {
@@ -61,8 +66,8 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
         }
     }
 
-    public void setGustaveBikeServiceEndpointAddress(java.lang.String address) {
-        GustaveBikeService_address = address;
+    public void setFxtopServicesPortEndpointAddress(java.lang.String address) {
+        FxtopServicesPort_address = address;
     }
 
     /**
@@ -72,9 +77,9 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
      */
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (com.kamelia.webservice.service.GustaveBikeService.class.isAssignableFrom(serviceEndpointInterface)) {
-                com.kamelia.webservice.service.GustaveBikeServiceSoapBindingStub _stub = new com.kamelia.webservice.service.GustaveBikeServiceSoapBindingStub(new java.net.URL(GustaveBikeService_address), this);
-                _stub.setPortName(getGustaveBikeServiceWSDDServiceName());
+            if (FxtopAPI.FxtopServicesPortType.class.isAssignableFrom(serviceEndpointInterface)) {
+                FxtopAPI.FxtopServicesBindingStub _stub = new FxtopAPI.FxtopServicesBindingStub(new java.net.URL(FxtopServicesPort_address), this);
+                _stub.setPortName(getFxtopServicesPortWSDDServiceName());
                 return _stub;
             }
         }
@@ -94,8 +99,8 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
             return getPort(serviceEndpointInterface);
         }
         java.lang.String inputPortName = portName.getLocalPart();
-        if ("GustaveBikeService".equals(inputPortName)) {
-            return getGustaveBikeService();
+        if ("FxtopServicesPort".equals(inputPortName)) {
+            return getFxtopServicesPort();
         }
         else  {
             java.rmi.Remote _stub = getPort(serviceEndpointInterface);
@@ -105,7 +110,7 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
     }
 
     public javax.xml.namespace.QName getServiceName() {
-        return new javax.xml.namespace.QName("http://service.webservice.kamelia.com", "GustaveBikeServiceService");
+        return new javax.xml.namespace.QName("urn:FxtopAPI", "FxtopServices");
     }
 
     private java.util.HashSet ports = null;
@@ -113,7 +118,7 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
     public java.util.Iterator getPorts() {
         if (ports == null) {
             ports = new java.util.HashSet();
-            ports.add(new javax.xml.namespace.QName("http://service.webservice.kamelia.com", "GustaveBikeService"));
+            ports.add(new javax.xml.namespace.QName("urn:FxtopAPI", "FxtopServicesPort"));
         }
         return ports.iterator();
     }
@@ -123,8 +128,8 @@ public class GustaveBikeServiceServiceLocator extends org.apache.axis.client.Ser
     */
     public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
         
-if ("GustaveBikeService".equals(portName)) {
-            setGustaveBikeServiceEndpointAddress(address);
+if ("FxtopServicesPort".equals(portName)) {
+            setFxtopServicesPortEndpointAddress(address);
         }
         else 
 { // Unknown Port Name

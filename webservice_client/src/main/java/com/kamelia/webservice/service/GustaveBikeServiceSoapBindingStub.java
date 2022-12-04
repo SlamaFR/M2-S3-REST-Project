@@ -29,6 +29,8 @@ public class GustaveBikeServiceSoapBindingStub extends org.apache.axis.client.St
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.webservice.kamelia.com", "bikeId"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
         oper.addParameter(param);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://service.webservice.kamelia.com", "currency"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"), java.lang.String.class, false, false);
+        oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://dto.webservice.kamelia.com", "PurchaseResponse"));
         oper.setReturnClass(com.kamelia.webservice.dto.PurchaseResponse.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://service.webservice.kamelia.com", "buyBikeReturn"));
@@ -140,7 +142,7 @@ public class GustaveBikeServiceSoapBindingStub extends org.apache.axis.client.St
         }
     }
 
-    public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId) throws java.rmi.RemoteException {
+    public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId, java.lang.String currency) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -156,7 +158,7 @@ public class GustaveBikeServiceSoapBindingStub extends org.apache.axis.client.St
 
         setRequestHeaders(_call);
         setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userId, bikeId});
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {userId, bikeId, currency});
 
         if (_resp instanceof java.rmi.RemoteException) {
             throw (java.rmi.RemoteException)_resp;

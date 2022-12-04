@@ -8,7 +8,8 @@
 package com.kamelia.ebc.bank;
 
 public interface BankService extends java.rmi.Remote {
-    public com.kamelia.ebc.bank.dto.Response debit(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException;
-    public com.kamelia.ebc.bank.dto.Response credit(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException;
-    public com.kamelia.ebc.bank.dto.Response checkBalance(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException;
+    public com.kamelia.ebc.bank.dto.Response debit(java.lang.String bankAccount, java.lang.String currency, double amount) throws java.rmi.RemoteException;
+    public com.kamelia.ebc.bank.dto.Response credit(java.lang.String bankAccount, java.lang.String currency, double amount) throws java.rmi.RemoteException;
+    public com.kamelia.ebc.bank.dto.Response checkBalance(java.lang.String bankAccount, double amount) throws java.rmi.RemoteException;
+    public double getBalance(java.lang.String bankAccount, java.lang.String currency) throws java.rmi.RemoteException;
 }

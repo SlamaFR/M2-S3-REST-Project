@@ -35,7 +35,7 @@ public class GustaveBikeService {
 		}
 	}
 
-	public PurchaseResponse buyBike(String userId, String bikeId) throws RemoteException {
+	public PurchaseResponse buyBike(String userId, String bikeId, String currency) throws RemoteException {
 		UUID bikeUUID = UUID.fromString(bikeId);
 		RemoteOptional<Bike> optionalBike = BIKE_STORAGE.findById(bikeUUID);
 
@@ -57,9 +57,10 @@ public class GustaveBikeService {
 			return new PurchaseResponse("You don't have enough money", 403);
 		}
 
-		BANK_SERVICE.debit(userId, price);
-		BANK_SERVICE.credit(bike.owner().id().toString(), price);
+		BANK_SERVICE.debit(userId, currency, price);
+		BANK_SERVICE.credit(bike.owner().id().toString(), currency, price);
 		BIKE_STORAGE.changeBikeOwner(bikeUUID, UUID.fromString(userId));
+
 		return new PurchaseResponse("Purchase successful", 200);
 	}
 }

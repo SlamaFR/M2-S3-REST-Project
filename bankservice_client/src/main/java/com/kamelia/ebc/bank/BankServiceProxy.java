@@ -44,22 +44,28 @@ public class BankServiceProxy implements com.kamelia.ebc.bank.BankService {
     return bankService;
   }
   
-  public com.kamelia.ebc.bank.dto.Response debit(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException{
+  public com.kamelia.ebc.bank.dto.Response debit(java.lang.String bankAccount, java.lang.String currency, double amount) throws java.rmi.RemoteException{
     if (bankService == null)
       _initBankServiceProxy();
-    return bankService.debit(bankAccount, amount);
+    return bankService.debit(bankAccount, currency, amount);
   }
   
-  public com.kamelia.ebc.bank.dto.Response credit(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException{
+  public com.kamelia.ebc.bank.dto.Response credit(java.lang.String bankAccount, java.lang.String currency, double amount) throws java.rmi.RemoteException{
     if (bankService == null)
       _initBankServiceProxy();
-    return bankService.credit(bankAccount, amount);
+    return bankService.credit(bankAccount, currency, amount);
   }
   
-  public com.kamelia.ebc.bank.dto.Response checkBalance(java.lang.String bankAccount, int amount) throws java.rmi.RemoteException{
+  public com.kamelia.ebc.bank.dto.Response checkBalance(java.lang.String bankAccount, double amount) throws java.rmi.RemoteException{
     if (bankService == null)
       _initBankServiceProxy();
     return bankService.checkBalance(bankAccount, amount);
+  }
+  
+  public double getBalance(java.lang.String bankAccount, java.lang.String currency) throws java.rmi.RemoteException{
+    if (bankService == null)
+      _initBankServiceProxy();
+    return bankService.getBalance(bankAccount, currency);
   }
   
   

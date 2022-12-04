@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -26,6 +26,7 @@
   <ns3:operation name="buyBike" qname="ns1:buyBike" returnQName="ns1:buyBikeReturn" returnType="ns2:PurchaseResponse" soapAction="" xmlns:ns1="http://service.webservice.kamelia.com" xmlns:ns2="http://dto.webservice.kamelia.com" xmlns:ns3="http://xml.apache.org/axis/wsdd/">
    <ns3:parameter qname="ns1:userId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
    <ns3:parameter qname="ns1:bikeId" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:currency" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns3:operation>
   <ns1:parameter name="allowedMethods" value="buyBike"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>

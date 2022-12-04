@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.0.0")
     implementation(project(":webservice_client"))
+    implementation(project(":bankservice_client"))
 
     implementation("org.apache.axis:axis:1.4")
     implementation("javax.xml.rpc:javax.xml.rpc-api:1.1.1")

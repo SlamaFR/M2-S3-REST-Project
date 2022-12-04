@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -25,17 +25,23 @@
  <ns1:service name="BankService" provider="java:RPC" style="wrapped" use="literal">
   <ns3:operation name="debit" qname="ns1:debit" returnQName="ns1:debitReturn" returnType="ns2:Response" soapAction="" xmlns:ns1="http://bank.ebc.kamelia.com" xmlns:ns2="http://dto.bank.ebc.kamelia.com" xmlns:ns3="http://xml.apache.org/axis/wsdd/">
    <ns3:parameter qname="ns1:bankAccount" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns3:parameter qname="ns1:amount" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:currency" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:amount" type="xsd:double" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns3:operation>
   <ns1:operation name="credit" qname="ns3:credit" returnQName="ns3:creditReturn" returnType="ns4:Response" soapAction="" xmlns:ns3="http://bank.ebc.kamelia.com" xmlns:ns4="http://dto.bank.ebc.kamelia.com">
    <ns1:parameter qname="ns3:bankAccount" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns3:amount" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns3:currency" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns3:amount" type="xsd:double" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns1:operation>
   <ns1:operation name="checkBalance" qname="ns5:checkBalance" returnQName="ns5:checkBalanceReturn" returnType="ns6:Response" soapAction="" xmlns:ns5="http://bank.ebc.kamelia.com" xmlns:ns6="http://dto.bank.ebc.kamelia.com">
    <ns1:parameter qname="ns5:bankAccount" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns5:amount" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns5:amount" type="xsd:double" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns1:operation>
-  <ns1:parameter name="allowedMethods" value="debit credit checkBalance"/>
+  <ns1:operation name="getBalance" qname="ns7:getBalance" returnQName="ns7:getBalanceReturn" returnType="xsd:double" soapAction="" xmlns:ns7="http://bank.ebc.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns7:bankAccount" type="xsd:string"/>
+   <ns1:parameter qname="ns7:currency" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="getBalance debit credit checkBalance"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
   <ns1:parameter name="wsdlPortType" value="BankService"/>
   <ns1:parameter name="className" value="com.kamelia.ebc.bank.BankService"/>
@@ -43,7 +49,7 @@
   <ns1:parameter name="schemaQualified" value="http://dto.bank.ebc.kamelia.com,http://bank.ebc.kamelia.com"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://bank.ebc.kamelia.com"/>
   <ns1:parameter name="wsdlServiceElement" value="BankServiceService"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns7:Response" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.ebc.bank.dto.Response" xmlns:ns7="http://dto.bank.ebc.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns8:Response" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.ebc.bank.dto.Response" xmlns:ns8="http://dto.bank.ebc.kamelia.com"/>
  </ns1:service>
  <ns1:service name="AdminService" provider="java:MSG">
   <ns1:parameter name="allowedMethods" value="AdminService"/>

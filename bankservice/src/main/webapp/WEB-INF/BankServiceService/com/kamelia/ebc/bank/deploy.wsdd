@@ -12,17 +12,23 @@
       <parameter name="typeMappingVersion" value="1.2"/>
       <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="debit" qname="operNS:debit" returnQName="retNS:debitReturn" returnType="rtns:Response" soapAction="">
         <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
-        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:currency" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:double"/>
       </operation>
       <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="credit" qname="operNS:credit" returnQName="retNS:creditReturn" returnType="rtns:Response" soapAction="">
         <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
-        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:currency" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:double"/>
       </operation>
       <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="checkBalance" qname="operNS:checkBalance" returnQName="retNS:checkBalanceReturn" returnType="rtns:Response" soapAction="">
         <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
-        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:double"/>
       </operation>
-      <parameter name="allowedMethods" value="debit credit checkBalance"/>
+      <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getBalance" qname="operNS:getBalance" returnQName="retNS:getBalanceReturn" returnType="rtns:double" soapAction="">
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:currency" type="tns:string"/>
+      </operation>
+      <parameter name="allowedMethods" value="getBalance debit credit checkBalance"/>
 
       <typeMapping xmlns:ns="http://dto.bank.ebc.kamelia.com" qname="ns:Response" type="java:com.kamelia.ebc.bank.dto.Response" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
   </service>

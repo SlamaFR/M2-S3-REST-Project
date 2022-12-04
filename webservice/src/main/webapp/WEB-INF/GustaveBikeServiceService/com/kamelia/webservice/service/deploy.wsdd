@@ -13,6 +13,7 @@
       <operation xmlns:operNS="http://service.webservice.kamelia.com" xmlns:retNS="http://service.webservice.kamelia.com" xmlns:rtns="http://dto.webservice.kamelia.com" name="buyBike" qname="operNS:buyBike" returnQName="retNS:buyBikeReturn" returnType="rtns:PurchaseResponse" soapAction="">
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:userId" type="tns:string"/>
         <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bikeId" type="tns:string"/>
+        <parameter xmlns:pns="http://service.webservice.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:currency" type="tns:string"/>
       </operation>
       <parameter name="allowedMethods" value="buyBike"/>
 

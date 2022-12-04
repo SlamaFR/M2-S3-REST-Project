@@ -44,10 +44,10 @@ public class GustaveBikeServiceProxy implements com.kamelia.webservice.service.G
     return gustaveBikeService;
   }
   
-  public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId) throws java.rmi.RemoteException{
+  public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId, java.lang.String currency) throws java.rmi.RemoteException{
     if (gustaveBikeService == null)
       _initGustaveBikeServiceProxy();
-    return gustaveBikeService.buyBike(userId, bikeId);
+    return gustaveBikeService.buyBike(userId, bikeId, currency);
   }
   
   

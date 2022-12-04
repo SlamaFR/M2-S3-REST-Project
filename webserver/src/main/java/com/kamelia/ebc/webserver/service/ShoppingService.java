@@ -11,13 +11,22 @@ import java.util.UUID;
 public class ShoppingService {
 
     private final GustaveBikeService gustaveBikeService;
+    private final BankService bankService;
 
-    public ShoppingService(GustaveBikeService gustaveBikeService) {
+    public ShoppingService(
+        GustaveBikeService gustaveBikeService,
+        BankService bankService
+    ) {
         this.gustaveBikeService = gustaveBikeService;
+        this.bankService = bankService;
     }
 
     public Pair<String, Integer> buyBike(UUID userId, UUID bikeId) throws RemoteException {
         var purchaseResponse = gustaveBikeService.buyBike(userId.toString(), bikeId.toString());
         return new Pair<>(purchaseResponse.getMessage(), purchaseResponse.getStatus());
+    }
+
+    public Double getBalance(UUID bankAccountId, String currency) throws RemoteException {
+        return bankService.getBalance(bankAccountId.toString(), currency);
     }
 }

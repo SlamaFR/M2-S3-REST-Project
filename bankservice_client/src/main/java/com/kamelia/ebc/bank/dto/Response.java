@@ -8,7 +8,7 @@
 package com.kamelia.ebc.bank.dto;
 
 public class Response  implements java.io.Serializable {
-    private int balance;
+    private double balance;
 
     private java.lang.String state;
 
@@ -16,7 +16,7 @@ public class Response  implements java.io.Serializable {
     }
 
     public Response(
-           int balance,
+           double balance,
            java.lang.String state) {
            this.balance = balance;
            this.state = state;
@@ -28,7 +28,7 @@ public class Response  implements java.io.Serializable {
      * 
      * @return balance
      */
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -38,7 +38,7 @@ public class Response  implements java.io.Serializable {
      * 
      * @param balance
      */
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -89,7 +89,7 @@ public class Response  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getBalance();
+        _hashCode += new Double(getBalance()).hashCode();
         if (getState() != null) {
             _hashCode += getState().hashCode();
         }
@@ -106,7 +106,7 @@ public class Response  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("balance");
         elemField.setXmlName(new javax.xml.namespace.QName("http://dto.bank.ebc.kamelia.com", "balance"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

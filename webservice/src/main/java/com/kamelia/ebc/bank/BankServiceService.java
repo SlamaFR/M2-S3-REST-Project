@@ -8,9 +8,9 @@
 package com.kamelia.ebc.bank;
 
 public interface BankServiceService extends javax.xml.rpc.Service {
-    public java.lang.String getBankServiceAddress();
+    public String getBankServiceAddress();
 
-    public com.kamelia.ebc.bank.BankService getBankService() throws javax.xml.rpc.ServiceException;
+    public BankService getBankService() throws javax.xml.rpc.ServiceException;
 
-    public com.kamelia.ebc.bank.BankService getBankService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
+    public BankService getBankService(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }

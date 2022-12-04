@@ -9,7 +9,8 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
     <complexType>
      <sequence>
       <element name="bankAccount" type="xsd:string"/>
-      <element name="amount" type="xsd:int"/>
+      <element name="currency" type="xsd:string"/>
+      <element name="amount" type="xsd:double"/>
      </sequence>
     </complexType>
    </element>
@@ -24,7 +25,8 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
     <complexType>
      <sequence>
       <element name="bankAccount" type="xsd:string"/>
-      <element name="amount" type="xsd:int"/>
+      <element name="currency" type="xsd:string"/>
+      <element name="amount" type="xsd:double"/>
      </sequence>
     </complexType>
    </element>
@@ -39,7 +41,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
     <complexType>
      <sequence>
       <element name="bankAccount" type="xsd:string"/>
-      <element name="amount" type="xsd:int"/>
+      <element name="amount" type="xsd:double"/>
      </sequence>
     </complexType>
    </element>
@@ -50,11 +52,26 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
+   <element name="getBalance">
+    <complexType>
+     <sequence>
+      <element name="bankAccount" type="xsd:string"/>
+      <element name="currency" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getBalanceResponse">
+    <complexType>
+     <sequence>
+      <element name="getBalanceReturn" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
   </schema>
   <schema elementFormDefault="qualified" targetNamespace="http://dto.bank.ebc.kamelia.com" xmlns="http://www.w3.org/2001/XMLSchema">
    <complexType name="Response">
     <sequence>
-     <element name="balance" type="xsd:int"/>
+     <element name="balance" type="xsd:double"/>
      <element name="state" nillable="true" type="xsd:string"/>
     </sequence>
    </complexType>
@@ -64,6 +81,22 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <wsdl:message name="debitRequest">
 
       <wsdl:part element="impl:debit" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getBalanceResponse">
+
+      <wsdl:part element="impl:getBalanceResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getBalanceRequest">
+
+      <wsdl:part element="impl:getBalance" name="parameters">
 
       </wsdl:part>
 
@@ -147,6 +180,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="getBalance">
+
+         <wsdl:input message="impl:getBalanceRequest" name="getBalanceRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getBalanceResponse" name="getBalanceResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
    </wsdl:portType>
 
    <wsdl:binding name="BankServiceSoapBinding" type="impl:BankService">
@@ -200,6 +245,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="checkBalanceResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getBalance">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getBalanceRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getBalanceResponse">
 
             <wsdlsoap:body use="literal"/>
 

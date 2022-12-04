@@ -8,5 +8,5 @@
 package com.kamelia.webservice.service;
 
 public interface GustaveBikeService extends java.rmi.Remote {
-    public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId) throws java.rmi.RemoteException;
+    public com.kamelia.webservice.dto.PurchaseResponse buyBike(java.lang.String userId, java.lang.String bikeId, java.lang.String currency) throws java.rmi.RemoteException;
 }

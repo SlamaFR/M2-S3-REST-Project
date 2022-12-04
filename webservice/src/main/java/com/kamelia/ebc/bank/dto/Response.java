@@ -8,16 +8,16 @@
 package com.kamelia.ebc.bank.dto;
 
 public class Response  implements java.io.Serializable {
-    private int balance;
+    private double balance;
 
-    private java.lang.String state;
+    private String state;
 
     public Response() {
     }
 
     public Response(
-           int balance,
-           java.lang.String state) {
+           double balance,
+           String state) {
            this.balance = balance;
            this.state = state;
     }
@@ -28,7 +28,7 @@ public class Response  implements java.io.Serializable {
      * 
      * @return balance
      */
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -38,7 +38,7 @@ public class Response  implements java.io.Serializable {
      * 
      * @param balance
      */
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -48,7 +48,7 @@ public class Response  implements java.io.Serializable {
      * 
      * @return state
      */
-    public java.lang.String getState() {
+    public String getState() {
         return state;
     }
 
@@ -58,12 +58,12 @@ public class Response  implements java.io.Serializable {
      * 
      * @param state
      */
-    public void setState(java.lang.String state) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    private java.lang.Object __equalsCalc = null;
-    public synchronized boolean equals(java.lang.Object obj) {
+    private Object __equalsCalc = null;
+    public synchronized boolean equals(Object obj) {
         if (!(obj instanceof Response)) return false;
         Response other = (Response) obj;
         if (obj == null) return false;
@@ -89,7 +89,7 @@ public class Response  implements java.io.Serializable {
         }
         __hashCodeCalc = true;
         int _hashCode = 1;
-        _hashCode += getBalance();
+        _hashCode += new Double(getBalance()).hashCode();
         if (getState() != null) {
             _hashCode += getState().hashCode();
         }
@@ -106,7 +106,7 @@ public class Response  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("balance");
         elemField.setXmlName(new javax.xml.namespace.QName("http://dto.bank.ebc.kamelia.com", "balance"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
@@ -128,8 +128,8 @@ public class Response  implements java.io.Serializable {
      * Get Custom Serializer
      */
     public static org.apache.axis.encoding.Serializer getSerializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           String mechType,
+           Class _javaType,
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanSerializer(
@@ -140,8 +140,8 @@ public class Response  implements java.io.Serializable {
      * Get Custom Deserializer
      */
     public static org.apache.axis.encoding.Deserializer getDeserializer(
-           java.lang.String mechType, 
-           java.lang.Class _javaType,  
+           String mechType,
+           Class _javaType,
            javax.xml.namespace.QName _xmlType) {
         return 
           new  org.apache.axis.encoding.ser.BeanDeserializer(

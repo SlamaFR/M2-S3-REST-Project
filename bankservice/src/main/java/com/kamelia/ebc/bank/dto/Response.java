@@ -3,11 +3,11 @@ package com.kamelia.ebc.bank.dto;
 public class Response {
 
     private String state;
-    private int balance;
+    private double balance;
 
     public Response() {}
 
-    public Response(String state, int balance) {
+    public Response(String state, double balance) {
         this.state = state;
         this.balance = balance;
     }
@@ -24,7 +24,7 @@ public class Response {
         return state;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 }
