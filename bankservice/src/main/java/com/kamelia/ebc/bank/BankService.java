@@ -25,12 +25,8 @@ public class BankService {
 
     static {
         try {
-            System.out.println("eee");
             CURRENCY_CONVERTER = new FxtopServicesLocator().getFxtopServicesPort();
-            System.out.println("fff");
         } catch (ServiceException e) {
-            System.out.println("NEEEEEEEEE");
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

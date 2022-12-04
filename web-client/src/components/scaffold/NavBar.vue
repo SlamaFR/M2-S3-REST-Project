@@ -27,7 +27,7 @@ const notifications = computedAsync<string[]>(async () => await getNotifications
 const currencyIcon = computed(() => {
   if (!isConnected || user.value.currency === "USD") return CurrencyDollarIcon;
   else if (user.value.currency === "EUR") return CurrencyEuroIcon;
-  else if (user.value.currency === "YEN") return CurrencyYenIcon;
+  else if (user.value.currency === "JPY") return CurrencyYenIcon;
   else return CurrencyDollarIcon;
 })
 
