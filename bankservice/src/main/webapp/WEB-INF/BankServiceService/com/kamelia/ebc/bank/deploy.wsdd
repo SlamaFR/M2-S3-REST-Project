@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from BankServiceService WSDL service -->
+
+  <service name="BankService" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://bank.ebc.kamelia.com"/>
+      <parameter name="wsdlServiceElement" value="BankServiceService"/>
+      <parameter name="schemaQualified" value="http://dto.bank.ebc.kamelia.com,http://bank.ebc.kamelia.com"/>
+      <parameter name="wsdlServicePort" value="BankService"/>
+      <parameter name="className" value="com.kamelia.ebc.bank.BankService"/>
+      <parameter name="wsdlPortType" value="BankService"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="debit" qname="operNS:debit" returnQName="retNS:debitReturn" returnType="rtns:Response" soapAction="">
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+      </operation>
+      <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="credit" qname="operNS:credit" returnQName="retNS:creditReturn" returnType="rtns:Response" soapAction="">
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+      </operation>
+      <operation xmlns:operNS="http://bank.ebc.kamelia.com" xmlns:retNS="http://bank.ebc.kamelia.com" xmlns:rtns="http://dto.bank.ebc.kamelia.com" name="checkBalance" qname="operNS:checkBalance" returnQName="retNS:checkBalanceReturn" returnType="rtns:Response" soapAction="">
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:bankAccount" type="tns:string"/>
+        <parameter xmlns:pns="http://bank.ebc.kamelia.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:amount" type="tns:int"/>
+      </operation>
+      <parameter name="allowedMethods" value="debit credit checkBalance"/>
+
+      <typeMapping xmlns:ns="http://dto.bank.ebc.kamelia.com" qname="ns:Response" type="java:com.kamelia.ebc.bank.dto.Response" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+  </service>
+</deployment>

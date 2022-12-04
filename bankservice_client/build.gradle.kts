@@ -1,3 +1,16 @@
+plugins {
+    java
+}
+
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation("org.apache.axis:axis:1.4")
     implementation("javax.xml.rpc:javax.xml.rpc-api:1.1.1")

@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -22,6 +22,18 @@
  <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
  <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
  <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <ns1:service name="GustaveBikeService" provider="java:RPC" style="wrapped" use="literal">
+  <ns2:operation name="f" qname="ns1:f" returnQName="ns1:fReturn" returnType="xsd:string" soapAction="" xmlns:ns1="http://service.webservice.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/"/>
+  <ns1:operation name="buyBike" qname="ns2:buyBike" returnQName="ns2:buyBikeReturn" returnType="xsd:string" soapAction="" xmlns:ns2="http://service.webservice.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:parameter name="allowedMethods" value="buyBike f"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="GustaveBikeService"/>
+  <ns1:parameter name="className" value="com.kamelia.webservice.service.GustaveBikeService"/>
+  <ns1:parameter name="wsdlServicePort" value="GustaveBikeService"/>
+  <ns1:parameter name="schemaQualified" value="http://service.webservice.kamelia.com"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://service.webservice.kamelia.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="GustaveBikeServiceService"/>
+ </ns1:service>
  <ns1:service name="AdminService" provider="java:MSG">
   <ns1:parameter name="allowedMethods" value="AdminService"/>
   <ns1:parameter name="enableRemoteAdmin" value="false"/>
@@ -29,13 +41,13 @@
   <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
  </ns1:service>
  <ns1:service name="Hello" provider="java:RPC" style="wrapped" use="literal">
-  <ns2:operation name="sayHello" qname="ns1:sayHello" returnQName="ns1:sayHelloReturn" returnType="xsd:string" soapAction="" xmlns:ns1="http://service.webservice.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://xml.apache.org/axis/wsdd/">
-   <ns2:parameter qname="ns1:name" type="xsd:string"/>
-  </ns2:operation>
-  <ns1:operation name="sayFooe" qname="ns2:sayFooe" returnQName="ns2:sayFooeReturn" returnType="ns3:Foo" soapAction="" xmlns:ns2="http://service.webservice.kamelia.com" xmlns:ns3="http://webservice.kamelia.com">
-   <ns1:parameter qname="ns2:test" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="sayHello" qname="ns3:sayHello" returnQName="ns3:sayHelloReturn" returnType="xsd:string" soapAction="" xmlns:ns3="http://service.webservice.kamelia.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns3:name" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="bigTest" qname="ns4:bigTest" returnQName="ns4:bigTestReturn" returnType="ns5:Bike" soapAction="" xmlns:ns4="http://service.webservice.kamelia.com" xmlns:ns5="http://dto.webservice.kamelia.com"/>
+  <ns1:operation name="sayFooe" qname="ns4:sayFooe" returnQName="ns4:sayFooeReturn" returnType="ns5:Foo" soapAction="" xmlns:ns4="http://service.webservice.kamelia.com" xmlns:ns5="http://webservice.kamelia.com">
+   <ns1:parameter qname="ns4:test" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="bigTest" qname="ns6:bigTest" returnQName="ns6:bigTestReturn" returnType="ns7:Bike" soapAction="" xmlns:ns6="http://service.webservice.kamelia.com" xmlns:ns7="http://dto.webservice.kamelia.com"/>
   <ns1:parameter name="allowedMethods" value="bigTest sayHello sayFooe"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
   <ns1:parameter name="wsdlPortType" value="Hello"/>
@@ -44,12 +56,12 @@
   <ns1:parameter name="schemaQualified" value="http://webservice.kamelia.com,http://dto.webservice.kamelia.com,http://service.webservice.kamelia.com"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://service.webservice.kamelia.com"/>
   <ns1:parameter name="wsdlServiceElement" value="HelloService"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns6:ReturnState" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.ReturnState" xmlns:ns6="http://dto.webservice.kamelia.com"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns7:Foo" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.Foo" xmlns:ns7="http://webservice.kamelia.com"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns8:Order" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Order" xmlns:ns8="http://dto.webservice.kamelia.com"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns9:Comment" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Comment" xmlns:ns9="http://dto.webservice.kamelia.com"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns10:Bike" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Bike" xmlns:ns10="http://dto.webservice.kamelia.com"/>
-  <ns1:arrayMapping innerType="ns12:Order" languageSpecificType="java:com.kamelia.webservice.dto.Order[]" qname="ns11:ArrayOf_tns2_Order" xmlns:ns11="http://service.webservice.kamelia.com" xmlns:ns12="http://dto.webservice.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns8:ReturnState" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.ReturnState" xmlns:ns8="http://dto.webservice.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns9:Foo" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.Foo" xmlns:ns9="http://webservice.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns10:Order" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Order" xmlns:ns10="http://dto.webservice.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns11:Comment" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Comment" xmlns:ns11="http://dto.webservice.kamelia.com"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns12:Bike" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.kamelia.webservice.dto.Bike" xmlns:ns12="http://dto.webservice.kamelia.com"/>
+  <ns1:arrayMapping innerType="ns14:Order" languageSpecificType="java:com.kamelia.webservice.dto.Order[]" qname="ns13:ArrayOf_tns2_Order" xmlns:ns13="http://service.webservice.kamelia.com" xmlns:ns14="http://dto.webservice.kamelia.com"/>
  </ns1:service>
  <ns1:service name="Version" provider="java:RPC">
   <ns1:parameter name="allowedMethods" value="getVersion"/>
