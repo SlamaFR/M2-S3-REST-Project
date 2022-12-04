@@ -273,7 +273,7 @@ public class BikeStorageImpl extends UnicastRemoteObject implements BikeStorage 
         var user = opt.get();
         orderBikeForUser(bike, user);
         userIdToNotifications.computeIfAbsent(user.id(), (ignored) -> new ArrayList<>())
-            .add("Ouais mon reuf le vélo " + bike.id() + " est prêt");
+            .add("Bike {" + bike.id() + "} is ready");
     }
 
     private void orderBikeForUser(BikeImpl bike, User orderer) throws RemoteException {
