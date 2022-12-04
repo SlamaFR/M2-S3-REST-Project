@@ -5,13 +5,12 @@ import FxtopAPI.FxtopServicesLocator;
 import FxtopAPI.FxtopServicesPortType;
 import com.kamelia.ebc.bank.dto.Response;
 
+import javax.xml.rpc.ServiceException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-
-import javax.xml.rpc.ServiceException;
 
 public class BankService {
 
@@ -80,11 +79,10 @@ public class BankService {
     public Response credit(String bankAccount, String currency, double amount) throws RemoteException {
         UUID uuid = UUID.fromString(bankAccount);
 
-        Double value = convert(amount, currency, DEFAULT_CURRENCY);
         Double newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Double, Double>() {
             @Override
             public Double apply(UUID k, Double v) {
-                return (v == null ? DEFAULT_BALANCE : v) + value;
+                return (v == null ? DEFAULT_BALANCE : v) + amount;
             }
         });
         return new Response("OK", convert(newBalance, DEFAULT_CURRENCY, currency));
@@ -99,11 +97,10 @@ public class BankService {
         if (!"OK".equals(check.getState())) {
             return new Response("INSUFFICIENT_BALANCE", check.getBalance());
         }
-        Double value = convert(amount, currency, DEFAULT_CURRENCY);
         Double newBalance = BANK_ACCOUNTS.compute(uuid, new BiFunction<UUID, Double, Double>() {
             @Override
             public Double apply(UUID k, Double v) {
-                return (v == null ? .0 : v) - value;
+                return (v == null ? .0 : v) - amount;
             }
         });
         return new Response("OK", convert(newBalance, DEFAULT_CURRENCY, currency));
